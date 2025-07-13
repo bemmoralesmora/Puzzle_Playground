@@ -10,10 +10,11 @@ export function pantalla_carga() {
   let infoJuego = document.createElement("div");
   infoJuego.className = "info-juego";
 
+  // 🔧 Declarar aquí para que actualizarInfo tenga acceso
   let infoPartida = document.createElement("div");
-  infoPartida.className = "info-partida"; // Este será nuestro contenedor
-  infoJuego.appendChild(infoPartida);
+  infoPartida.className = "info-partida";
 
+  infoJuego.appendChild(infoPartida);
   pantalla_carga.appendChild(infoJuego);
 
   return {
@@ -21,9 +22,8 @@ export function pantalla_carga() {
     promise: new Promise((resolve) => {
       setTimeout(() => {
         resolve();
-      }, 10000); // 10 segundos
+      }, 5000);
     }),
-    // Añadimos función para actualizar información
     actualizarInfo: (info) => {
       infoPartida.innerHTML = `
         <p>Juego: ${info.nombreJuego || "N/A"}</p>

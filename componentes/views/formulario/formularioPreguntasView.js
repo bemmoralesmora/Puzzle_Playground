@@ -1,6 +1,7 @@
 import { pantalla_carga } from "../carga/cargaView.js";
 import { juego } from "../preguntasView/preguntasView.js";
 import { getSocket, conectarSocket } from "../../../socketManager.js";
+import { AuthService } from "../../../authService.js";
 
 export function cargarFormularioPreguntas() {
   let formulario = document.createElement("div");
@@ -17,11 +18,11 @@ export function cargarFormularioPreguntas() {
   formulario.appendChild(nombre);
 
   let num_jugadores = document.createElement("input");
-  num_jugadores.placeholder = "Número de jugadores (1-5)";
+  num_jugadores.placeholder = "Número de jugadores (1-30)";
   num_jugadores.className = "num-jugadores";
   num_jugadores.type = "number";
   num_jugadores.min = "1";
-  num_jugadores.max = "5";
+  num_jugadores.max = "30";
   formulario.appendChild(num_jugadores);
 
   let selectorNivel = document.createElement("div");
@@ -125,7 +126,7 @@ export function cargarFormularioPreguntas() {
     const jugadoresValido =
       num_jugadores.value &&
       num_jugadores.value >= 1 &&
-      num_jugadores.value <= 5;
+      num_jugadores.value <= 30;
     const nivelSeleccionado = nivelSeleccionadoGlobal !== null;
     const dificultadSeleccionada = dificultadSeleccionadaGlobal !== null;
 
@@ -189,7 +190,7 @@ export function cargarFormularioPreguntas() {
       !dificultadSeleccionadaGlobal ||
       !numJugadores ||
       numJugadores < 1 ||
-      numJugadores > 5 ||
+      numJugadores > 30 ||
       codigoGenerado === "Complete los datos"
     ) {
       alert("Por favor completa todos los campos correctamente.");
@@ -221,14 +222,49 @@ export function cargarFormularioPreguntas() {
       const resultado = await guardarPartida(datosPartida);
       console.log("✅ Partida guardada:", resultado);
 
+      await new Promise((res) => setTimeout(res, 5000));
+
       const exito = document.createElement("div");
       exito.className = "mensaje-exito";
       exito.innerHTML = `
         <h3>¡Partida creada exitosamente!</h3>
-        <p>Código: ${codigoGenerado}</p>
+        <p>Código: <strong>${codigoGenerado}</strong></p>
+        <div class="jugadores-conectados">
+          <h4>Jugadores conectados:</h4>
+          <ul class="lista-jugadores">
+            <li>(Tú)</li>
+          </ul>
+        </div>
         <button class="btn-comenzar-partida">Comenzar Juego</button>
       `;
+      DOM.innerHTML = "";
       DOM.appendChild(exito);
+
+      const listaJugadores = exito.querySelector(".lista-jugadores");
+
+      // 1. Conectar socket
+      const idLogin = localStorage.getItem("userId");
+      const token = localStorage.getItem("token");
+      const socket = await conectarSocket(idLogin, token);
+
+      // 2. Unirse a la partida como creador
+      socket.emit("unirse_partida", {
+        codigoPartida: datosPartida.codigo_generado,
+        idLogin: idLogin,
+      });
+
+      // 3. Escuchar jugadores que se van uniendo
+      socket.on("actualizar_jugadores", (data) => {
+        listaJugadores.innerHTML = "";
+        data.listaJugadores.forEach((jugador) => {
+          const li = document.createElement("li");
+          li.textContent =
+            jugador === localStorage.getItem("username")
+              ? `${jugador} (Tú)`
+              : jugador;
+          listaJugadores.appendChild(li);
+        });
+      });
 
       DOM.querySelector(".btn-comenzar-partida").addEventListener(
         "click",

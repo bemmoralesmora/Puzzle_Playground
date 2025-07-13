@@ -1,37 +1,55 @@
 .pantalla_carga {
   width: 100%;
   height: 100vh;
-
+  background: linear-gradient(135deg, #fbeec1, #ffcfdf); /* tonos juguetones */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 2rem;
+  font-size: 1.2rem;
+  font-family: "Bungee", sans-serif;
 }
 
 .cargando {
-  width: 20rem;
-  height: 20rem;
+  width: 10rem;
+  height: 10rem;
   border-radius: 50%;
-  border: 11px solid black;
+  border: 10px solid #ff9aa2; /* borde externo */
+  border-top: 10px solid #f15bb5; /* parte giratoria */
+  animation: spin 1s linear infinite;
+  position: relative;
+  background-color: #fff0f5;
+  box-shadow: 0 0 15px rgba(241, 91, 181, 0.4);
+}
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-
+.cargando::after {
+  content: "Cargando...";
+  position: absolute;
+  top: 110%;
+  width: 100%;
+  text-align: center;
+  font-size: 1.2rem;
   font-family: "Bungee", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+  color: #4a4a4a;
 }
 
 .numero_jugadores {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-
+  font-size: 1.2rem;
   font-family: "Bungee", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+  color: #333;
+  background-color: #fcd5ce;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-left: 5px solid #ff6f61;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

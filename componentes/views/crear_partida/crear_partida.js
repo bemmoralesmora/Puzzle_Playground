@@ -35,10 +35,6 @@ function crear_partida() {
     crearJuegoPreguntas(),
     crearJuegoAhorcado(),
     crearJuegoReciclaje(),
-    // Espacio para agregar más juegos después:
-    // crearJuego5(),
-    // crearJuego6(),
-    // etc...
   ];
 
   // Índice actual del carrusel
@@ -145,7 +141,7 @@ function crearJuegoAhorcado() {
   imagen_ahorcado.className = "imagen_preguntas";
 
   let imgAhorcado = document.createElement("img");
-  imgAhorcado.src = "https://example.com/ruta/a/imagen/ahorcado.jpg"; // Cambia esta URL
+  imgAhorcado.src = "../../componentes/assets/ahorcado.jpg"; // Cambia esta URL
 
   imagen_ahorcado.appendChild(imgAhorcado);
   juego_ahorcado.appendChild(imagen_ahorcado);
@@ -174,7 +170,7 @@ function crearJuegoReciclaje() {
   imagen_reciclaje.className = "imagen_preguntas";
 
   let imgReciclaje = document.createElement("img");
-  imgReciclaje.src = "https://example.com/ruta/a/imagen/reciclaje.jpg"; // Cambia esta URL
+  imgReciclaje.src = "../../componentes/assets/reciclaje.jpg";
 
   imagen_reciclaje.appendChild(imgReciclaje);
   juego_reciclaje.appendChild(imagen_reciclaje);
