@@ -6,10 +6,6 @@ async function perfil(idUsuario) {
   const baseURL = "https://backend-game-mnte.onrender.com/api/usuarios";
   let userInfo, logrosInfo, partidasInfo;
 
-  console.log("Datos usuario:", userInfo);
-  console.log("Datos logros:", logrosInfo);
-  console.log("Datos partidas:", partidasInfo);
-
   try {
     const [resUsuario, resLogros, resPartidas] = await Promise.all([
       fetch(`${baseURL}/${idUsuario}`),
@@ -18,9 +14,14 @@ async function perfil(idUsuario) {
     ]);
 
     if (!resUsuario.ok) throw new Error("Usuario no encontrado");
+
     userInfo = await resUsuario.json();
     logrosInfo = await resLogros.json();
     partidasInfo = await resPartidas.json();
+
+    console.log("✅ Datos usuario:", userInfo);
+    console.log("✅ Datos logros:", logrosInfo);
+    console.log("✅ Datos partidas:", partidasInfo);
   } catch (error) {
     console.error("Error al cargar el perfil:", error.message);
     const errorMsg = document.createElement("p");
