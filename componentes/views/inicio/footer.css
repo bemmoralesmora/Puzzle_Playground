@@ -31,3 +31,41 @@
   height: 100%;
   object-fit: cover;
 }
+
+/* --- Responsive para iPad (ancho máximo 768px) --- */
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .btn_github {
+    width: 12rem;
+    height: 3.5rem;
+  }
+
+  .colaboradores {
+    font-size: 13px;
+  }
+}
+
+/* --- Responsive para móvil (ancho máximo 375px) --- */
+@media (max-width: 400px) {
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .btn_github {
+    width: 9rem;
+    height: 2.5rem;
+  }
+
+  .colaboradores {
+    font-size: 12px;
+  }
+}

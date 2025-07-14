@@ -53,3 +53,52 @@
     transform: rotate(360deg);
   }
 }
+
+/* --- Responsive para iPad (ancho máximo 768px) --- */
+@media (max-width: 768px) {
+  .pantalla_carga {
+    font-size: 1rem;
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+
+  .cargando {
+    width: 7rem;
+    height: 7rem;
+    border-width: 7px;
+  }
+
+  .cargando::after {
+    font-size: 1rem;
+  }
+
+  .numero_jugadores {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* --- Responsive para móvil (ancho máximo 375px) --- */
+@media (max-width: 400px) {
+  .pantalla_carga {
+    font-size: 0.9rem;
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+
+  .cargando {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-width: 5px;
+  }
+
+  .cargando::after {
+    font-size: 0.9rem;
+  }
+
+  .numero_jugadores {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 0.7rem;
+  }
+}
