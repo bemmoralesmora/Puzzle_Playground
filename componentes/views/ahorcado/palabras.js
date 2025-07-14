@@ -1,0 +1,7 @@
+export const palabrasPorNivel = {
+  1: ["GATO", "SOL", "LUNA", "ROJO", "PERRO", "FLOR"],
+  2: ["CASITA", "ARBUSTO", "ESFERA", "PLANETA", "BOTELLA"],
+  3: ["ESCALERA", "MARIPOSA", "ELEFANTE", "VIOLETA"],
+  4: ["TELEVISOR", "COMPUTADORA", "AEROPUERTO"],
+  5: ["ESTADISTICAS", "INVESTIGACION", "PROGRAMACION"],
+};

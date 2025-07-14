@@ -1,6 +1,7 @@
 /* Estilos base del formulario - aplica a ambos */
 .formulario-preguntas,
-.formulario-memoria {
+.formulario-memoria,
+.formulario-ahorcado {
   width: 100%;
   min-height: 80vh;
   background-color: var(--blue-claro);
@@ -16,7 +17,9 @@
 .formulario-preguntas .nombre,
 .formulario-preguntas .num-jugadores,
 .formulario-memoria .nombre,
-.formulario-memoria .num-jugadores {
+.formulario-memoria .num-jugadores,
+.formulario-ahorcado .nombre,
+.formulario-ahorcado .num-jugadores {
   width: 100%;
   max-width: 500px;
   height: 4rem;

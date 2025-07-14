@@ -1,6 +1,7 @@
 import { pantalla_carga } from "../carga/cargaView.js";
 import { juego } from "../preguntasView/preguntasView.js";
 import { juegoMemoria } from "../memoria/memoriaView.js";
+import { cargarAhorcado } from "../ahorcado/juegoAhorcado.js";
 import {
   conectarSocket,
   escucharEventos,
@@ -349,6 +350,8 @@ function jugar_amigos() {
 
         if (data.nombre_juego === "memoria") {
           DOM.appendChild(juegoMemoria(nivel, dificultad));
+        } else if (data.nombre_juego === "ahorcado") {
+          DOM.appendChild(cargarAhorcado(nivel, dificultad));
         } else {
           DOM.appendChild(juego(nivel, dificultad)); // trivia por defecto
         }

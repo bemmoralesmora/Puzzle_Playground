@@ -1,8 +1,6 @@
 import { cargarFormularioPreguntas } from "../formulario/formularioPreguntasView.js";
 import { cargarFormularioMemoria } from "../formulario/formularioMemoriaView.js";
-/* import { cargarFormularioAhorcado } from "../formulario/formularioAhorcadoView.js";
-import { cargarFormularioReciclaje } from "../formulario/formularioReciclajeView.js"; */
-
+import { cargarFormularioAhorcado } from "../formulario/formularioAhorcado.js";
 function crear_partida() {
   let crear_partida = document.createElement("div");
   crear_partida.className = "crear_partida";
