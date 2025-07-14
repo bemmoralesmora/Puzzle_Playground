@@ -219,6 +219,21 @@
     gap: 1rem;
   }
 
+  .html,
+  .node,
+  .css,
+  .js {
+    width: 10rem;
+    height: 3.5rem;
+  }
+
+  .html p,
+  .node p,
+  .css p,
+  .js p {
+    font-size: 1.1rem;
+  }
+
   .play_video {
     width: 4rem;
     height: 4rem;
@@ -231,24 +246,80 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 400px) {
+  .inicio {
+    height: auto;
+    min-height: 80vh;
+    padding: 0.5rem;
+    gap: 1rem;
+  }
+
   .img_inicio {
-    width: 90vw;
+    width: 95vw;
+    max-width: 95vw;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    position: static;
+  }
+
+  .contenido_inicio {
+    padding: 0.5rem;
+    gap: 1rem;
+  }
+
+  .titulo_inicio {
+    font-size: clamp(2rem, 8vw, 2.5rem);
   }
 
   .texto_inicio {
-    width: 90%;
+    width: 98%;
+    font-size: 1rem;
+    max-width: 100%;
+    padding: 0.2rem;
+  }
+
+  .cont_lenguajes {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    height: auto;
+    padding: 0.5rem 0;
   }
 
   .html,
   .node,
   .css,
   .js {
-    width: 45%;
-    margin-bottom: 1rem;
+    width: 90vw;
+    height: 2.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
   }
 
-  .titulo_inicio {
-    font-size: clamp(3rem, 10vw, 4rem);
+  .html-logo,
+  .node-logo,
+  .css-logo,
+  .js-logo {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+  }
+
+  .html p,
+  .node p,
+  .css p,
+  .js p {
+    font-size: 0.9rem;
+  }
+
+  .play_video {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .play_games {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1rem;
   }
 }

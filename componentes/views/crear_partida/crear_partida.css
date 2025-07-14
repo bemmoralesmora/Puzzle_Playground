@@ -189,3 +189,97 @@ button:hover {
   mix-blend-mode: overlay;
   opacity: 0.3;
 }
+
+/* --- Responsive para iPad (ancho máximo 768px) --- */
+@media (max-width: 768px) {
+  .crear_partida {
+    padding: 1rem;
+    gap: 1rem;
+    height: auto; /* Cambiamos a altura automática */
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .carrusel-container {
+    flex-direction: column;
+    height: auto;
+    gap: 1.5rem;
+  }
+
+  .juegos {
+    width: 100%;
+    flex-direction: column;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    gap: 1.5rem;
+    padding: 1rem;
+    background-color: transparent; /* Quitamos el fondo para mejor visualización */
+  }
+
+  /* Mantenemos las proporciones originales pero ajustadas al responsive */
+  .juego_memoria,
+  .juego_preguntas,
+  .juego_ahorcado,
+  .juego_reciclaje {
+    width: 90%;
+    max-width: 35rem; /* Mismo ancho máximo que en desktop */
+    height: auto;
+    aspect-ratio: 35/50; /* Mantenemos la proporción 35rem/50rem original */
+    min-height: auto;
+    padding: 2rem;
+    margin: 0 auto; /* Centrado horizontal */
+    scroll-snap-align: start;
+    border-radius: 0.5rem; /* Mantenemos bordes redondeados */
+  }
+
+  /* Flechas de navegación vertical */
+  .flecha {
+    width: 4rem;
+    height: 4rem;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    background-color: var(--beige);
+  }
+
+  .flecha:first-of-type {
+    top: 1rem;
+  }
+
+  .flecha:last-of-type {
+    bottom: 1rem;
+    transform: translateX(-50%) rotate(180deg);
+  }
+
+  /* Imágenes manteniendo proporción original */
+  .imagen_preguntas {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 28/40; /* Proporción original 28rem/40rem */
+    max-width: 28rem;
+    margin: 0 auto;
+  }
+
+  .imagen_preguntas img {
+    object-fit: contain; /* Aseguramos que toda la imagen sea visible */
+  }
+}
+
+/* --- Ajustes para móviles pequeños (400px o menos) --- */
+@media (max-width: 400px) {
+  .juego_memoria,
+  .juego_preguntas,
+  .juego_ahorcado,
+  .juego_reciclaje {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  .flecha {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+  }
+}

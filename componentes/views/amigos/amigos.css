@@ -295,3 +295,188 @@ progress::-webkit-progress-value {
     transform: scale(1);
   }
 }
+
+/* --- Versión Tablet (768px o menos) --- */
+@media (max-width: 768px) {
+  .juega_amigos {
+    flex-direction: column;
+    height: auto;
+    padding: 1rem;
+    gap: 2rem;
+  }
+
+  .imagen_principal {
+    width: 100%;
+    max-width: 100%;
+    height: 25rem;
+    position: static;
+    transform: none;
+    margin-bottom: 1rem;
+    order: -1; /* Mover imagen arriba */
+  }
+
+  .partidas_publicas,
+  .partidas_privadas {
+    width: 100%;
+    padding: 1.5rem;
+    gap: 1.5rem;
+    margin: 0;
+  }
+
+  .partida_creada,
+  .ingresar_partida_p {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .partida_creada {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 1rem;
+  }
+
+  .nombre_partida,
+  .nombres_juego,
+  .num_j_partidas,
+  .nivel_partida,
+  .dificultad_partida {
+    font-size: 1.2rem;
+    width: 100%;
+    text-align: center;
+    margin: 0.3rem 0;
+  }
+
+  .unirse_pp {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .boton_ir {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .espera-partida {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+}
+
+/* --- Versión Móvil (400px o menos) --- */
+@media (max-width: 400px) {
+  .juega_amigos {
+    padding: 0.3rem;
+    gap: 0.5rem;
+    height: auto;
+    min-height: 100vh;
+    overflow-x: hidden;
+    flex-direction: column;
+  }
+
+  .imagen_principal {
+    width: 100vw;
+    max-width: 100vw;
+    height: 7rem; /* Más pequeña para evitar scroll */
+    min-height: 50rem;
+    margin-bottom: 0.3rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    position: static;
+    transform: none;
+  }
+
+  .imagen_principal img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+  }
+
+  .partidas_publicas,
+  .partidas_privadas {
+    width: 100vw;
+    max-width: 100vw;
+    padding: 0.3rem;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    height: 50VW;
+    min-height: unset;
+    box-sizing: border-box;
+  }
+
+  .partida_creada {
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.3rem;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+    border-radius: 0.5rem;
+  }
+
+  .nombre_partida,
+  .nombres_juego,
+  .num_j_partidas,
+  .nivel_partida,
+  .dificultad_partida {
+    font-size: 0.8rem;
+    margin: 0.1rem;
+    flex: 1 1 45%;
+    text-align: center;
+  }
+
+  .unirse_pp {
+    width: 100%;
+    height: 2rem;
+    font-size: 0.75rem;
+    margin-top: 0.2rem;
+    border-radius: 0.5rem;
+  }
+
+  .ingresar_partida_p {
+    width: 100%;
+    height: 2rem;
+    font-size: 0.8rem;
+    padding: 0 0.3rem;
+    border-radius: 0.5rem;
+  }
+
+  .boton_ir {
+    width: 100%;
+    height: 2rem;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    border-radius: 0.5rem;
+  }
+
+  .espera-partida {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    margin: 0.3rem 0;
+    border-radius: 0.5rem;
+    max-width: 100vw;
+  }
+
+  .info-item {
+    font-size: 0.7rem;
+    margin: 0.1rem 0;
+  }
+
+  .btn-abandonar {
+    width: 100%;
+    padding: 0.3rem;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    border-radius: 0.5rem;
+  }
+
+  .lista-jugadores li {
+    padding: 0.3rem;
+    font-size: 0.8rem;
+    border-radius: 0.5rem;
+  }
+}

@@ -226,6 +226,7 @@
     padding: 1.5rem;
     width: 95%;
     min-height: auto;
+    gap: 1rem;
   }
 
   .btn-nivel,
@@ -240,13 +241,40 @@
   .cont_f_i_d {
     gap: 0.5rem;
   }
+
+  .btn-crear-partida {
+    max-width: 220px;
+    height: 4rem;
+    font-size: 1rem;
+    padding: 0.7rem;
+  }
+
+  .mensaje-exito h3,
+  .mensaje-exito p {
+    font-size: 2.5rem;
+  }
+
+  .btn-comenzar-partida {
+    width: 12rem;
+    height: 3rem;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .lista-jugadores {
+    width: 100%;
+    max-width: 300px;
+    font-size: 0.9rem;
+  }
 }
 
-@media (max-width: 480px) {
+/* --- Responsive para móvil (ancho máximo 375px) --- */
+@media (max-width: 400px) {
   .formulario-preguntas,
   .formulario-memoria {
-    padding: 1rem;
-    gap: 1rem;
+    padding: 0.7rem;
+    gap: 0.7rem;
+    min-height: auto;
   }
 
   .btn-nivel,
@@ -255,16 +283,40 @@
   .nivel_dificil {
     width: 100%;
     max-width: none;
-    height: 3.5rem;
+    height: 3rem;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.2rem;
   }
 
   .cont_f_i_d {
     flex-direction: column;
     align-items: center;
+    gap: 0.3rem;
   }
 
-  .btn-jugar {
-    height: 4rem;
+  .btn-crear-partida {
+    max-width: 100%;
+    height: 3rem;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  .mensaje-exito h3,
+  .mensaje-exito p {
+    font-size: 1.5rem;
+  }
+
+  .btn-comenzar-partida {
+    width: 100%;
+    height: 2.5rem;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .lista-jugadores {
+    width: 100%;
+    max-width: 200px;
+    font-size: 0.8rem;
   }
 }
 
