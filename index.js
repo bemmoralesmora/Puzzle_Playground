@@ -17,7 +17,7 @@ const checkAuth = () => {
   return localStorage.getItem("isLoggedIn") === "true";
 };
 
-function cargarContenidoPrincipal() {
+async function cargarContenidoPrincipal() {
   DOM.innerHTML = "";
   DOM.className = "dom";
 
@@ -36,33 +36,38 @@ function mostrarInicio() {
 
 async function mostrarPerfil() {
   console.log("▶️ mostrarPerfil llamado");
-
   mainContent.innerHTML = "";
 
-  // Crear el contenedor que contendrá el perfil
-  const contenedor = document.createElement("div");
-  contenedor.id = "contenedor-perfil";
-  mainContent.appendChild(contenedor);
+  // Mostrar mensaje de carga
+  const loadingMsg = document.createElement("p");
+  loadingMsg.textContent = "Cargando perfil...";
+  mainContent.appendChild(loadingMsg);
 
-  console.log("🧱 Contenedor:", contenedor);
+  try {
+    const idUsuario = localStorage.getItem("userId");
+    console.log("🆔 ID Usuario:", idUsuario);
 
-  const idUsuario = localStorage.getItem("userId");
-  console.log("🆔 ID Usuario:", idUsuario);
+    if (!idUsuario) {
+      throw new Error("No se encontró el ID del usuario.");
+    }
 
-  if (!idUsuario) {
-    console.error("No se encontró el ID del usuario.");
-    contenedor.textContent = "No se puede cargar el perfil. ID no disponible.";
-    return;
-  }
+    const perfilElement = await perfil(idUsuario);
+    console.log("🧩 perfilElement:", perfilElement);
 
-  const perfilElement = await perfil(idUsuario);
-  console.log("🧩 perfilElement:", perfilElement);
+    // Limpiar mensaje de carga
+    mainContent.innerHTML = "";
 
-  if (perfilElement instanceof Node) {
-    contenedor.innerHTML = "";
-    contenedor.appendChild(perfilElement);
-  } else {
-    contenedor.textContent = "Error al cargar el perfil.";
+    if (perfilElement) {
+      mainContent.appendChild(perfilElement);
+    } else {
+      throw new Error("No se pudo generar el elemento del perfil.");
+    }
+  } catch (error) {
+    console.error("Error al mostrar el perfil:", error);
+    mainContent.innerHTML = "";
+    const errorMsg = document.createElement("p");
+    errorMsg.textContent = `Error al cargar el perfil: ${error.message}`;
+    mainContent.appendChild(errorMsg);
   }
 }
 

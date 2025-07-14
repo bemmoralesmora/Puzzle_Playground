@@ -1,5 +1,6 @@
 import { pantalla_carga } from "../carga/cargaView.js";
 import { juego } from "../preguntasView/preguntasView.js";
+import { juegoMemoria } from "../memoria/memoriaView.js";
 import {
   conectarSocket,
   escucharEventos,
@@ -346,7 +347,11 @@ function jugar_amigos() {
         const nivel = parseInt(data.nivel); // viene desde el servidor
         const dificultad = data.dificultad; // viene desde el servidor
 
-        DOM.appendChild(juego(nivel, dificultad));
+        if (data.nombre_juego === "memoria") {
+          DOM.appendChild(juegoMemoria(nivel, dificultad));
+        } else {
+          DOM.appendChild(juego(nivel, dificultad)); // trivia por defecto
+        }
       },
     });
   }

@@ -204,6 +204,7 @@ export function cargarFormularioPreguntas() {
       dificultad: dificultadSeleccionadaGlobal,
       codigo_generado: codigoGenerado,
       id_usuarios: localStorage.getItem("userId") || null,
+      nombre_juego: "trivia",
     };
 
     const DOM = document.querySelector("#root");
