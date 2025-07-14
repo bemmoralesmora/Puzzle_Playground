@@ -1,105 +1,151 @@
-function perfil() {
-  let perfil = document.createElement("div");
+async function perfil(idUsuario) {
+  const perfil = document.createElement("div");
   perfil.className = "perfil";
 
-  // Estructura del perfil
-  let user = document.createElement("div");
+  // Fetch de la info del usuario
+  const baseURL = "https://backend-game-mnte.onrender.com/api/usuarios";
+  let userInfo, logrosInfo, partidasInfo;
+
+  console.log("Datos usuario:", userInfo);
+  console.log("Datos logros:", logrosInfo);
+  console.log("Datos partidas:", partidasInfo);
+
+  try {
+    const [resUsuario, resLogros, resPartidas] = await Promise.all([
+      fetch(`${baseURL}/${idUsuario}`),
+      fetch(`${baseURL}/logros/${idUsuario}`),
+      fetch(`${baseURL}/partidas/${idUsuario}`),
+    ]);
+
+    if (!resUsuario.ok) throw new Error("Usuario no encontrado");
+    userInfo = await resUsuario.json();
+    logrosInfo = await resLogros.json();
+    partidasInfo = await resPartidas.json();
+  } catch (error) {
+    console.error("Error al cargar el perfil:", error.message);
+    const errorMsg = document.createElement("p");
+    errorMsg.textContent = "No se pudo cargar el perfil.";
+    perfil.appendChild(errorMsg);
+    return perfil;
+  }
+
+  // --- Estructura del perfil (sin cambios de estilo) ---
+  const user = document.createElement("div");
   user.className = "user";
   perfil.appendChild(user);
 
-  // Sección de datos del usuario
-  let datos = document.createElement("div");
+  const datos = document.createElement("div");
   datos.className = "datos";
   user.appendChild(datos);
 
-  let datos_user = document.createElement("div");
+  const datos_user = document.createElement("div");
   datos_user.className = "datos_user";
   datos.appendChild(datos_user);
 
-  let estados_iconos = document.createElement("div");
+  const estados_iconos = document.createElement("div");
   estados_iconos.className = "estados_iconos";
   datos_user.appendChild(estados_iconos);
 
-  let tag = document.createElement("div");
+  const tag = document.createElement("div");
   tag.className = "tag";
   estados_iconos.appendChild(tag);
 
-  let icono_1 = document.createElement("div");
+  const icono_1 = document.createElement("div");
   icono_1.className = "icono_1";
   estados_iconos.appendChild(icono_1);
 
-  let icono_2 = document.createElement("div");
+  const icono_2 = document.createElement("div");
   icono_2.className = "icono_2";
   estados_iconos.appendChild(icono_2);
 
-  let datos_personales = document.createElement("div");
+  const datos_personales = document.createElement("div");
   datos_personales.className = "datos_personales";
   datos_user.appendChild(datos_personales);
 
-  let nombre = document.createElement("h1");
+  const nombre = document.createElement("h1");
   nombre.className = "nombre";
-  nombre.textContent = "Nombre de Usuario";
+  nombre.textContent = userInfo.nombre;
   datos_personales.appendChild(nombre);
 
-  let descripcion = document.createElement("h2");
+  const descripcion = document.createElement("h2");
   descripcion.className = "descripcion";
-  descripcion.textContent = "Descripción del usuario";
+  descripcion.textContent = userInfo.descripcion || "Sin descripción";
   datos_personales.appendChild(descripcion);
 
-  let followers = document.createElement("h3");
+  const followers = document.createElement("h3");
   followers.className = "followers";
-  followers.textContent = "Seguidores: 0";
+  followers.textContent = `Seguidores: ${userInfo.seguidores}`;
   datos_user.appendChild(followers);
 
-  let img_perfil = document.createElement("div");
+  const img_perfil = document.createElement("div");
   img_perfil.className = "img_perfil";
   datos.appendChild(img_perfil);
 
-  let img_perfil_img = document.createElement("img");
+  const img_perfil_img = document.createElement("img");
   img_perfil_img.className = "img_perfil_img";
   img_perfil_img.src =
+    userInfo.imagen_perfil ||
     "https://cdn.shopify.com/s/files/1/0607/2306/9147/files/catnap.png";
   img_perfil_img.alt = "Imagen de perfil";
   img_perfil.appendChild(img_perfil_img);
 
-  // Sección de estados del usuario
-  let texto_partidas = document.createElement("div");
+  // --- Partidas ---
+  const texto_partidas = document.createElement("div");
   texto_partidas.className = "texto_partidas";
   texto_partidas.textContent = "Partidas";
   user.appendChild(texto_partidas);
 
-  let info_partidas = document.createElement("div");
+  const info_partidas = document.createElement("div");
   info_partidas.className = "info_partidas";
   user.appendChild(info_partidas);
 
-  let victorias = document.createElement("h1");
+  const victorias = document.createElement("h1");
   victorias.className = "victorias";
+  victorias.textContent = `Victorias: ${userInfo.victorias}`;
   info_partidas.appendChild(victorias);
 
-  let derrotas = document.createElement("h1");
+  const derrotas = document.createElement("h1");
   derrotas.className = "derrotas";
+  derrotas.textContent = `Derrotas: ${userInfo.derrotas}`;
   info_partidas.appendChild(derrotas);
 
-  let total_partidas = document.createElement("h1");
+  const total_partidas = document.createElement("h1");
   total_partidas.className = "total_partidas";
+  total_partidas.textContent = `Total: ${userInfo.total_partidas}`;
   info_partidas.appendChild(total_partidas);
 
-  // Sección de logros
-  let logros = document.createElement("div");
+  // --- Logros ---
+  const logros = document.createElement("div");
   logros.className = "logros";
   perfil.appendChild(logros);
 
-  let logros_obtenidos = document.createElement("div");
+  const logros_obtenidos = document.createElement("div");
   logros_obtenidos.className = "logros_obtenidos";
   logros.appendChild(logros_obtenidos);
 
-  let estadisticas_titulo = document.createElement("h1");
+  logrosInfo.forEach((logro) => {
+    const logroItem = document.createElement("div");
+    logroItem.className = "logro";
+
+    const titulo = document.createElement("h4");
+    titulo.textContent = logro.nombre_logro;
+
+    const descripcion = document.createElement("p");
+    descripcion.textContent = logro.descripcion_logro;
+
+    logroItem.appendChild(titulo);
+    logroItem.appendChild(descripcion);
+    logros_obtenidos.appendChild(logroItem);
+  });
+
+  const estadisticas_titulo = document.createElement("h1");
   estadisticas_titulo.className = "estadisticas_titulo";
   estadisticas_titulo.textContent = "Estadísticas";
   logros.appendChild(estadisticas_titulo);
 
-  let estadisticas = document.createElement("div");
+  const estadisticas = document.createElement("div");
   estadisticas.className = "estadisticas";
+  estadisticas.textContent = `Puntos: ${userInfo.puntos}`;
   logros.appendChild(estadisticas);
 
   return perfil;

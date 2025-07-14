@@ -34,9 +34,36 @@ function mostrarInicio() {
   mainContent.appendChild(inicio());
 }
 
-function mostrarPerfil() {
+async function mostrarPerfil() {
+  console.log("▶️ mostrarPerfil llamado");
+
   mainContent.innerHTML = "";
-  mainContent.appendChild(perfil());
+
+  // Crear el contenedor que contendrá el perfil
+  const contenedor = document.createElement("div");
+  contenedor.id = "contenedor-perfil";
+  mainContent.appendChild(contenedor);
+
+  console.log("🧱 Contenedor:", contenedor);
+
+  const idUsuario = localStorage.getItem("userId");
+  console.log("🆔 ID Usuario:", idUsuario);
+
+  if (!idUsuario) {
+    console.error("No se encontró el ID del usuario.");
+    contenedor.textContent = "No se puede cargar el perfil. ID no disponible.";
+    return;
+  }
+
+  const perfilElement = await perfil(idUsuario);
+  console.log("🧩 perfilElement:", perfilElement);
+
+  if (perfilElement instanceof Node) {
+    contenedor.innerHTML = "";
+    contenedor.appendChild(perfilElement);
+  } else {
+    contenedor.textContent = "Error al cargar el perfil.";
+  }
 }
 
 function mostrarJugarAmigos() {
