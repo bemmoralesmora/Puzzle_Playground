@@ -89,6 +89,12 @@ export function escucharEventos(socket, callbacks) {
   socket.on("disconnect", () => {
     console.log("Desconectado del servidor");
   });
+
+  socket.on("actualizar_podio", (podio) => {
+    if (callbacks.onActualizarPodio) {
+      callbacks.onActualizarPodio(podio);
+    }
+  });
 }
 
 export function desconectarSocket() {
