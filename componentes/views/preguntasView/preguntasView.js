@@ -1,5 +1,6 @@
 import { pantalla_carga } from "../carga/cargaView.js";
 import { preguntas } from "./preguntas.js";
+import { resultado } from "../resultados/resultados.js";
 
 export function juego(nivel) {
   const container = document.createElement("div");
@@ -122,13 +123,39 @@ export function juego(nivel) {
     tiempoDiv.textContent = `⏱️ Tiempo: ${tiempoTotal} segundos`;
     container.appendChild(tiempoDiv);
 
-    const reiniciarBtn = document.createElement("button");
-    reiniciarBtn.textContent = "Volver al inicio";
-    reiniciarBtn.className = "btn-opcion";
-    reiniciarBtn.onclick = () => {
-      mostrarInicio();
+    // Enviar los puntos al backend
+    fetch(
+      "https://backend-game-mnte.onrender.com/api/partidas/guardar-resultado",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          id_partida: localStorage.getItem("id_partida"),
+          id_login: localStorage.getItem("userId"),
+          puntos_obtenidos: correctas,
+        }),
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Puntos guardados:", data);
+      })
+      .catch((err) => console.error("Error al guardar puntos:", err));
+
+    const podioBtn = document.createElement("button");
+    podioBtn.textContent = "Ver Podio";
+    podioBtn.className = "btn-opcion";
+    podioBtn.onclick = async () => {
+      const mainContent = document.querySelector("#root");
+      mainContent.innerHTML = "";
+
+      const vistaResultados = await resultado();
+      mainContent.appendChild(vistaResultados);
     };
-    container.appendChild(reiniciarBtn);
+    container.appendChild(podioBtn);
   }
 
   if (!nivel) {

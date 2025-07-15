@@ -94,7 +94,8 @@ body {
 
 /* Botones */
 .btn-opcion {
-  width: 100%;
+  width: 15rem;
+  height: 5rem;
   padding: 15px 20px;
   font-size: 1.1rem;
   font-weight: 500;
@@ -109,7 +110,7 @@ body {
 
   font-family: "Bungee", sans-serif;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 25px;
 }
 
 .btn-opcion:hover:not(.correcta):not(.incorrecta) {
@@ -313,6 +314,7 @@ body {
   padding: 8px 16px;
   border-radius: 12px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  font-family: "Bungee", sans-serif;
 }
 
 .puntos-juego {
@@ -320,8 +322,14 @@ body {
   padding: 8px 16px;
   border-radius: 12px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  font-family: "Bungee", sans-serif;
 }
 
 .pregunta-container {
   margin-top: 20px;
+}
+
+.info-juego {
+  display: flex;
+  gap: 2rem;
 }
