@@ -1,5 +1,5 @@
 import { pantalla_carga } from "../carga/cargaView.js";
-import { preguntas } from "./preguntas.js"; // Asegúrate de importar tus preguntas
+import { preguntas } from "./preguntas.js";
 
 export function juego(nivel) {
   const container = document.createElement("div");
@@ -68,6 +68,34 @@ export function juego(nivel) {
     mostrarPregunta();
   }
 
+  function guardarPuntaje(puntaje, nivel) {
+    const puntajes = JSON.parse(localStorage.getItem('puntajes')) || {};
+    const puntajesNivel = puntajes[nivel] || [];
+    
+    puntajesNivel.push({
+      puntaje: puntaje,
+      fecha: new Date().toISOString()
+    });
+
+    // Mantener solo los últimos 10 puntajes para evitar acumular muchos datos
+    if (puntajesNivel.length > 10) {
+      puntajesNivel.shift();
+    }
+
+    puntajes[nivel] = puntajesNivel;
+    localStorage.setItem('puntajes', JSON.stringify(puntajes));
+  }
+
+  function obtenerMejoresPuntajes(nivel) {
+    const puntajes = JSON.parse(localStorage.getItem('puntajes')) || {};
+    const puntajesNivel = puntajes[nivel] || [];
+    
+    // Ordenar de mayor a menor y tomar los primeros 3
+    return puntajesNivel
+      .sort((a, b) => b.puntaje - a.puntaje)
+      .slice(0, 3);
+  }
+
   function mostrarFinal(correctas, total) {
     container.innerHTML = "";
 
@@ -81,25 +109,34 @@ export function juego(nivel) {
     mensaje.textContent = `Obtuviste ${correctas} de ${total} preguntas correctas.`;
     container.appendChild(mensaje);
 
-    const graficaDiv = document.createElement("div");
-    graficaDiv.className = "grafica";
-    const canvas = document.createElement("canvas");
-    canvas.id = "graficoResultados";
-    graficaDiv.appendChild(canvas);
-    container.appendChild(graficaDiv);
+    // Guardar el puntaje actual
+    guardarPuntaje(correctas, nivel);
+
+    // Obtener los mejores puntajes
+    const mejoresPuntajes = obtenerMejoresPuntajes(nivel);
+
+    // Gráfico de resultados actuales
+    const graficaActualDiv = document.createElement("div");
+    graficaActualDiv.className = "grafica";
+    const tituloActual = document.createElement("h3");
+    tituloActual.textContent = "Tu resultado:";
+    graficaActualDiv.appendChild(tituloActual);
+    
+    const canvasActual = document.createElement("canvas");
+    canvasActual.id = "graficoResultadosActual";
+    graficaActualDiv.appendChild(canvasActual);
+    container.appendChild(graficaActualDiv);
 
     const incorrectas = total - correctas;
-    new Chart(canvas, {
+    new Chart(canvasActual, {
       type: "bar",
       data: {
         labels: ["Correctas", "Incorrectas"],
-        datasets: [
-          {
-            label: "Respuestas",
-            data: [correctas, incorrectas],
-            backgroundColor: ["#2ecc71", "#e74c3c"],
-          },
-        ],
+        datasets: [{
+          label: "Respuestas",
+          data: [correctas, incorrectas],
+          backgroundColor: ["#2ecc71", "#e74c3c"],
+        }],
       },
       options: {
         responsive: true,
@@ -109,16 +146,73 @@ export function juego(nivel) {
             ticks: {
               stepSize: 1,
             },
+            max: total,
           },
         },
       },
     });
 
+    // Gráfico de mejores puntajes (solo si hay datos)
+    if (mejoresPuntajes.length > 0) {
+      const mejoresDiv = document.createElement("div");
+      mejoresDiv.className = "grafica";
+      const tituloMejores = document.createElement("h3");
+      tituloMejores.textContent = "Mejores puntajes:";
+      mejoresDiv.appendChild(tituloMejores);
+      
+      const canvasMejores = document.createElement("canvas");
+      canvasMejores.id = "graficoMejoresPuntajes";
+      mejoresDiv.appendChild(canvasMejores);
+      container.appendChild(mejoresDiv);
+
+      // Preparar datos para el gráfico
+      const labels = mejoresPuntajes.map((_, i) => `Top ${i + 1}`);
+      const data = mejoresPuntajes.map(p => p.puntaje);
+      const fechas = mejoresPuntajes.map(p => new Date(p.fecha).toLocaleDateString());
+
+      new Chart(canvasMejores, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "Puntaje",
+            data: data,
+            backgroundColor: [
+              "#f1c40f", // Oro
+              "#95a5a6", // Plata
+              "#cd7f32"  // Bronce
+            ],
+          }],
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1,
+              },
+              max: total,
+            },
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                afterLabel: function(context) {
+                  const index = context.dataIndex;
+                  return `Fecha: ${fechas[index]}`;
+                }
+              }
+            }
+          }
+        },
+      });
+    }
+
     const reiniciarBtn = document.createElement("button");
     reiniciarBtn.textContent = "Volver al inicio";
     reiniciarBtn.className = "btn-opcion";
     reiniciarBtn.onclick = () => {
-      // Aquí podrías redirigir a donde corresponda
       window.location.reload();
     };
     container.appendChild(reiniciarBtn);
