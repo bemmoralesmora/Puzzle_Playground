@@ -22,7 +22,7 @@ export function pantalla_carga() {
     promise: new Promise((resolve) => {
       setTimeout(() => {
         resolve();
-      }, 5000);
+      }, 3000);
     }),
     actualizarInfo: (info) => {
       infoPartida.innerHTML = `

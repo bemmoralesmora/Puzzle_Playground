@@ -1,4 +1,4 @@
-import { mostrarInicio } from "../../../index.js";
+import { mostrarInicio, cargarContenidoPrincipal } from "../../../index.js";
 
 export async function resultado() {
   const contenedor = document.createElement("div");
@@ -14,7 +14,10 @@ export async function resultado() {
   botonInicio.textContent = "Inicio";
   botonInicio.className = "boton-inicio";
   botonInicio.onclick = () => {
-    mostrarInicio();
+    const mainContent = document.querySelector("#root");
+    mainContent.innerHTML = "";
+
+    mainContent.appendChild(cargarContenidoPrincipal());
   };
 
   const botonVerResultados = document.createElement("button");
@@ -85,8 +88,11 @@ async function verTodosLosResultados() {
   const botonInicio = document.createElement("button");
   botonInicio.textContent = "Inicio";
   botonInicio.className = "boton-inicio";
-  botonInicio.onclick = () => {
-    mostrarInicio();
+  botonInicio.onclick = async () => {
+    const mainContent = document.querySelector("#root");
+    mainContent.innerHTML = "";
+
+    mainContent.appendChild(cargarContenidoPrincipal());
   };
 
   const botonGuardar = document.createElement("button");
