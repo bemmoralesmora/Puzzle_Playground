@@ -349,8 +349,7 @@ async function showVictoryMessage() {
     const mainContent = document.querySelector("#root");
     mainContent.innerHTML = "";
 
-    const vistaResultados = await resultado();
-    mainContent.appendChild(vistaResultados);
+    mainContent.appendChild(await resultado());
   };
 
   popupContainer.appendChild(popupTitle);
