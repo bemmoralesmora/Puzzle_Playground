@@ -157,6 +157,7 @@ function jugar_amigos() {
 
       // 5. Validar partida en el servidor
       const partida = await validarPartidaServidor(codigo, userId, token);
+      localStorage.setItem("id_partida", partida.id);
 
       // 6. Conectar socket
       const socket = await conectarSocketUsuario(userId, token);
