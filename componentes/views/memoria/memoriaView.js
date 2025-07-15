@@ -1,150 +1,148 @@
-function juegoMemoria() {
-  let DOM = document.querySelector("#root");
-  DOM.className = "DOM";
+import { resultado } from "../resultados/resultados.js";
+
+function memoriaGame() {
+  let gameContainer = document.querySelector("#root");
+  gameContainer.className = "memory-game-container";
 
   // Crear pantalla de bienvenida
-  let pantallaInicio = document.createElement("div");
-  pantallaInicio.className = "pantalla-inicio";
+  let welcomeScreen = document.createElement("div");
+  welcomeScreen.className = "welcome-screen";
 
-  let titulo = document.createElement("h1");
-  titulo.textContent = "Puzzle Playground";
+  let gameTitle = document.createElement("h1");
+  gameTitle.textContent = "Puzzle Playground";
 
-  let descripcion = document.createElement("p");
-  descripcion.textContent = "¡Pon a prueba tu memoria!";
+  let gameDescription = document.createElement("p");
+  gameDescription.textContent = "¡Pon a prueba tu memoria!";
 
-  let botonIniciar = document.createElement("button");
-  botonIniciar.id = "btn-iniciar";
-  botonIniciar.textContent = "Comenzar";
+  let startButton = document.createElement("button");
+  startButton.id = "start-game-btn";
+  startButton.textContent = "Comenzar";
 
-  // Agregar hijos a pantallaInicio
-  pantallaInicio.appendChild(titulo);
-  pantallaInicio.appendChild(descripcion);
-  pantallaInicio.appendChild(botonIniciar);
+  // Agregar elementos a la pantalla de bienvenida
+  welcomeScreen.appendChild(gameTitle);
+  welcomeScreen.appendChild(gameDescription);
+  welcomeScreen.appendChild(startButton);
 
-  // Agregar pantallaInicio al DOM
-  DOM.appendChild(pantallaInicio);
+  // Agregar pantalla al contenedor principal
+  gameContainer.appendChild(welcomeScreen);
 
-  // Cuando clickeen "Comenzar"
-  botonIniciar.onclick = () => {
-    pantallaInicio.remove();
-    iniciarJuego(DOM);
+  // Evento para comenzar el juego
+  startButton.onclick = () => {
+    welcomeScreen.remove();
+    startGameSession(gameContainer);
   };
 
-  return DOM;
+  return gameContainer;
 }
 
-let vidasRestantes = 5; // Vidas globales, inicializadas a 5
-let puntos = 0;
+let remainingLives = 5;
+let scorePoints = 0;
 
-function actualizarVidas(header) {
-  // Primero elimina vidas actuales
-  const vidasActuales = header.querySelectorAll(".vida");
-  vidasActuales.forEach((img) => img.remove());
+function updateLivesDisplay(gameHeader) {
+  // Eliminar vidas actuales
+  const currentLives = gameHeader.querySelectorAll(".life-icon");
+  currentLives.forEach((img) => img.remove());
 
-  // Total corazones (fijos a 5)
-  const totalVidas = 5;
+  // Total de vidas (5)
+  const totalLives = 5;
 
-  for (let i = 0; i < totalVidas; i++) {
-    let vida = document.createElement("img");
-    vida.className = "vida";
+  for (let i = 0; i < totalLives; i++) {
+    let lifeIcon = document.createElement("img");
+    lifeIcon.className = "life-icon";
 
-    if (i < vidasRestantes) {
-      // Corazón lleno (color)
-      vida.src = "./img/img.png";
+    if (i < remainingLives) {
+      lifeIcon.src = "../../componentes/assets/img/img.png";
     } else {
-      // Corazón vacío (gris)
-      vida.src =
+      lifeIcon.src =
         "https://img.freepik.com/vector-premium/icono-corazon-pixelado-vacio-vacio-vacio-ausencia-amor-soledad-anhelo-emociones-vacias-simbolo-digital-pixel-art-retro-nostalgia-icono-linea-vectorial-negocios-publicidad_855332-1962.jpg";
-      vida.style.opacity = "0.5"; // opcional para hacerlo más tenue
+      lifeIcon.style.opacity = "0.5";
     }
 
-    header.appendChild(vida);
+    gameHeader.appendChild(lifeIcon);
   }
 }
 
-function iniciarJuego(DOM) {
-  DOM.innerHTML = "";
+function startGameSession(gameContainer) {
+  gameContainer.innerHTML = "";
 
-  let header = document.createElement("div");
-  header.className = "header";
-  DOM.appendChild(header);
+  let gameHeader = document.createElement("div");
+  gameHeader.className = "game-header";
+  gameContainer.appendChild(gameHeader);
 
-  let titulo = document.createElement("h1");
-  titulo.textContent = "Puzzle Playground";
-  titulo.className = "titulo-header";
-  header.appendChild(titulo);
+  let headerTitle = document.createElement("h1");
+  headerTitle.textContent = "Puzzle Playground";
+  headerTitle.className = "game-header-title";
+  gameHeader.appendChild(headerTitle);
 
-  actualizarVidas(header);
+  updateLivesDisplay(gameHeader);
 
-  let cronometro = document.createElement("div");
-  cronometro.className = "cronometro";
-  cronometro.textContent = "Tiempo: 00";
-  header.appendChild(cronometro);
+  let timerDisplay = document.createElement("div");
+  timerDisplay.className = "game-timer";
+  timerDisplay.textContent = "Tiempo: 00";
+  gameHeader.appendChild(timerDisplay);
 
-  let puntosTexto = document.createElement("div");
-  puntosTexto.className = "puntos";
-  puntosTexto.innerHTML = `
-      <div class="marcador">
-          <span class="etiqueta">Puntos</span>
-          <span class="valor">${puntos}</span>
+  let scoreDisplay = document.createElement("div");
+  scoreDisplay.className = "score-display";
+  scoreDisplay.innerHTML = `
+      <div class="score-box">
+          <span class="score-label">Puntos</span>
+          <span class="score-value">${scorePoints}</span>
       </div>
   `;
-  header.appendChild(puntosTexto);
+  gameHeader.appendChild(scoreDisplay);
 
-  let tablero = document.createElement("div");
-  tablero.className = "tablero";
-  DOM.appendChild(tablero);
+  let gameBoard = document.createElement("div");
+  gameBoard.className = "memory-board";
+  gameContainer.appendChild(gameBoard);
 
-  let nivelActual = 1;
+  let currentLevel = 1;
 
-  const botonNivel = document.createElement("button");
-  botonNivel.className = "boton-nivel";
-  botonNivel.textContent = `Nivel ${nivelActual + 1}`;
+  const levelButton = document.createElement("button");
+  levelButton.className = "level-button";
+  levelButton.textContent = `Nivel ${currentLevel + 1}`;
 
-  // INICIALMENTE DESHABILITADO
-  botonNivel.disabled = true;
-  botonNivel.style.opacity = "0.6";
-  botonNivel.style.cursor = "default";
+  // Inicialmente deshabilitado
+  levelButton.disabled = true;
+  levelButton.style.opacity = "0.6";
+  levelButton.style.cursor = "default";
 
-  DOM.appendChild(botonNivel);
+  gameContainer.appendChild(levelButton);
 
-  generarNivel(nivelActual, tablero, header, botonNivel);
-
-  // NO asignar onclick aquí, se asignará cuando se complete el nivel
+  generateLevel(currentLevel, gameBoard, gameHeader, levelButton);
 }
 
-function actualizarPuntos(header) {
-  const puntosBox = header.querySelector(".puntos .valor");
-  if (puntosBox) {
-    puntosBox.textContent = puntos;
+function updateScoreDisplay(gameHeader) {
+  const scoreBox = gameHeader.querySelector(".score-display .score-value");
+  if (scoreBox) {
+    scoreBox.textContent = scorePoints;
   }
 }
 
-function crearCarta(valor) {
-  let carta = document.createElement("div");
-  carta.className = "carta";
-  carta.dataset.valor = valor; // guardamos el valor para comparar pares
+function createCard(value) {
+  let card = document.createElement("div");
+  card.className = "memory-card";
+  card.dataset.value = value;
 
-  let front = document.createElement("div");
-  front.className = "front";
+  let cardFront = document.createElement("div");
+  cardFront.className = "card-front";
 
-  let back = document.createElement("div");
-  back.className = "back";
+  let cardBack = document.createElement("div");
+  cardBack.className = "card-back";
 
-  let img = document.createElement("img");
-  img.src = `./img/${valor}`;
-  img.alt = "carta";
-  img.className = "imagen-carta";
+  let cardImage = document.createElement("img");
+  cardImage.src = `../../componentes/assets/img/${value}`;
+  cardImage.alt = "carta";
+  cardImage.className = "card-image";
 
-  back.appendChild(img);
+  cardBack.appendChild(cardImage);
 
-  carta.appendChild(front);
-  carta.appendChild(back);
+  card.appendChild(cardFront);
+  card.appendChild(cardBack);
 
-  return carta;
+  return card;
 }
 
-function mezclarArray(array) {
+function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
@@ -152,32 +150,31 @@ function mezclarArray(array) {
   return array;
 }
 
-function generarNivel(nivel, tablero, header, botonNivel) {
-  if (nivel > 5) return;
+function generateLevel(level, gameBoard, gameHeader, levelButton) {
+  if (level > 5) return;
 
-  tablero.innerHTML = "";
+  gameBoard.innerHTML = "";
 
-  const cantidadCartas = 4 + (nivel - 1) * 2;
+  const cardCount = 4 + (level - 1) * 2;
 
-  let tiempo = 8 + nivel * 2 + Math.floor(cantidadCartas / 2);
-  iniciarCronometro(tiempo, () => {
-    vidasRestantes--; // Restar una vida
-    actualizarVidas(header);
+  let timeLimit = 8 + level * 2 + Math.floor(cardCount / 2);
+  startGameTimer(timeLimit, () => {
+    remainingLives--;
+    updateLivesDisplay(gameHeader);
 
-    if (vidasRestantes > 0) {
-      mostrarCartelVidaPerdida(() => {
-        generarNivel(nivel, tablero, header, botonNivel); // Reinicia mismo nivel
+    if (remainingLives > 0) {
+      showLifeLostMessage(() => {
+        generateLevel(level, gameBoard, gameHeader, levelButton);
       });
     } else {
-      mostrarCartelGameOver();
+      showGameOverMessage();
     }
   });
 
-  const columnas = Math.ceil(Math.sqrt(cantidadCartas));
-  tablero.style.gridTemplateColumns = `repeat(${columnas}, auto)`;
+  const columns = Math.ceil(Math.sqrt(cardCount));
+  gameBoard.style.gridTemplateColumns = `repeat(${columns}, auto)`;
 
-  // Array de emojis para los pares (puedes poner imágenes o lo que prefieras)
-  const imagenes = [
+  const images = [
     "amarillo.png",
     "azul.png",
     "flor.png",
@@ -186,246 +183,221 @@ function generarNivel(nivel, tablero, header, botonNivel) {
     "verde.png",
   ];
 
-  // Tomamos la cantidad necesaria de pares (cantidadCartas / 2)
-  let valores = imagenes.slice(0, cantidadCartas / 2);
+  let cardValues = images.slice(0, cardCount / 2);
+  let cardPairs = cardValues.concat(cardValues);
+  shuffleArray(cardPairs);
 
-  // Creamos un array con dos de cada valor
-  let cartasValores = valores.concat(valores);
+  let flippedCards = [];
+  let matchedPairs = 0;
 
-  // Mezclamos
-  mezclarArray(cartasValores);
+  cardPairs.forEach((value) => {
+    const card = createCard(value);
 
-  // Variables para control de juego
-  let cartasVolteadas = [];
-  let paresEncontrados = 0;
-
-  cartasValores.forEach((valor) => {
-    const carta = crearCarta(valor);
-
-    carta.addEventListener("click", () => {
+    card.addEventListener("click", () => {
       if (
-        carta.classList.contains("volteada") ||
-        cartasVolteadas.length === 2 ||
-        carta.classList.contains("encontrada")
+        card.classList.contains("flipped") ||
+        flippedCards.length === 2 ||
+        card.classList.contains("matched")
       )
         return;
 
-      carta.classList.add("volteada");
-      cartasVolteadas.push(carta);
+      card.classList.add("flipped");
+      flippedCards.push(card);
 
-      if (cartasVolteadas.length === 2) {
-        const [carta1, carta2] = cartasVolteadas;
+      if (flippedCards.length === 2) {
+        const [card1, card2] = flippedCards;
 
-        if (carta1.dataset.valor === carta2.dataset.valor) {
-          // Par correcto
-          carta1.classList.add("encontrada");
-          carta2.classList.add("encontrada");
+        if (card1.dataset.value === card2.dataset.value) {
+          card1.classList.add("matched");
+          card2.classList.add("matched");
+          card1.style.opacity = "0.5";
+          card2.style.opacity = "0.5";
 
-          // Opacidad para indicar encontrado
-          carta1.style.opacity = "0.5";
-          carta2.style.opacity = "0.5";
+          matchedPairs++;
 
-          paresEncontrados++;
+          flippedCards = [];
 
-          // Limpiar volteadas
-          cartasVolteadas = [];
+          if (matchedPairs === cardCount / 2) {
+            let pointsEarned = 10 + (level - 1) * 2;
+            scorePoints += pointsEarned;
 
-          // ¿Se terminaron las cartas?
-          if (paresEncontrados === cantidadCartas / 2) {
-            // Asignar puntos según el nivel (puedes ajustar los valores si deseas)
-            let puntosGanados = 10 + (nivel - 1) * 2; // 10, 12, 14, 16, 18
-            puntos += puntosGanados;
+            let lifePenalty = 5 - remainingLives;
+            scorePoints -= lifePenalty;
 
-            // Penalización por vidas perdidas (por cada vida perdida, -1 punto)
-            let penalizacion = 5 - vidasRestantes;
-            puntos -= penalizacion;
+            if (scorePoints < 0) scorePoints = 0;
 
-            // Asegurarse de que no bajen de cero
-            if (puntos < 0) puntos = 0;
+            updateScoreDisplay(gameHeader);
 
-            // Actualizar visualmente los puntos
-            actualizarPuntos(header);
+            const button = document.querySelector(".level-button");
+            clearInterval(gameTimer);
+            if (level < 5) {
+              levelButton.disabled = false;
+              levelButton.style.opacity = "1";
+              levelButton.style.cursor = "pointer";
+              levelButton.textContent = `Nivel ${level + 1}`;
 
-            const boton = document.querySelector(".boton-nivel");
-            clearInterval(temporizador); // Detener el cronómetro al ganar
-            if (nivel < 5) {
-              // ACTIVAR BOTÓN SOLO CUANDO TERMINE EL NIVEL
-              botonNivel.disabled = false;
-              botonNivel.style.opacity = "1";
-              botonNivel.style.cursor = "pointer";
-              botonNivel.textContent = `Nivel ${nivel + 1}`;
-
-              botonNivel.onclick = () => {
-                generarNivel(nivel + 1, tablero, header, botonNivel);
-                // DESHABILITAR BOTÓN AL PASAR AL SIGUIENTE NIVEL
-                botonNivel.disabled = true;
-                botonNivel.style.opacity = "0.6";
-                botonNivel.style.cursor = "default";
+              levelButton.onclick = () => {
+                generateLevel(level + 1, gameBoard, gameHeader, levelButton);
+                levelButton.disabled = true;
+                levelButton.style.opacity = "0.6";
+                levelButton.style.cursor = "default";
               };
             } else {
-              boton.textContent = "🎉 ¡Completado!";
-              boton.disabled = true;
-              boton.style.opacity = "0.6";
-              boton.style.cursor = "default";
+              button.textContent = "🎉 ¡Completado!";
+              button.disabled = true;
+              button.style.opacity = "0.6";
+              button.style.cursor = "default";
 
-              mostrarCartelFinal();
+              showVictoryMessage();
             }
           }
         } else {
-          // Par incorrecto - esperar y voltear atrás
           setTimeout(() => {
-            carta1.classList.remove("volteada");
-            carta2.classList.remove("volteada");
-            cartasVolteadas = [];
+            card1.classList.remove("flipped");
+            card2.classList.remove("flipped");
+            flippedCards = [];
           }, 1000);
         }
       }
     });
 
-    tablero.appendChild(carta);
+    gameBoard.appendChild(card);
   });
 }
 
-let temporizador; // Global para controlarlo
+let gameTimer;
 
-function iniciarCronometro(tiempoInicial, callbackFin) {
-  clearInterval(temporizador);
-  let tiempoRestante = tiempoInicial;
-  const cronometro = document.querySelector(".cronometro");
-  cronometro.textContent = `Tiempo: ${tiempoRestante}s`;
-  cronometro.classList.remove("critico"); // Resetear clase
+function startGameTimer(initialTime, timeoutCallback) {
+  clearInterval(gameTimer);
+  let timeLeft = initialTime;
+  const timerElement = document.querySelector(".game-timer");
+  timerElement.textContent = `Tiempo: ${timeLeft}s`;
+  timerElement.classList.remove("time-critical");
 
-  temporizador = setInterval(() => {
-    tiempoRestante--;
+  gameTimer = setInterval(() => {
+    timeLeft--;
 
-    // Añadir clase critico cuando quedan 5 segundos o menos
-    if (tiempoRestante <= 5) {
-      cronometro.classList.add("critico");
+    if (timeLeft <= 5) {
+      timerElement.classList.add("time-critical");
     }
 
-    cronometro.textContent = `Tiempo: ${tiempoRestante}s`;
+    timerElement.textContent = `Tiempo: ${timeLeft}s`;
 
-    if (tiempoRestante <= 0) {
-      clearInterval(temporizador);
-      callbackFin();
+    if (timeLeft <= 0) {
+      clearInterval(gameTimer);
+      timeoutCallback();
     }
   }, 1000);
 }
 
-function mostrarCartelFinal() {
-  // Calcular estadísticas
-  const vidasPerdidas = 5 - vidasRestantes;
-  const nivelMaximo = 5;
-  const eficiencia = Math.round((puntos / (100 + nivelMaximo * 2)) * 100);
+function showVictoryMessage() {
+  const livesLost = 5 - remainingLives;
+  const maxLevel = 5;
+  const efficiency = Math.round((scorePoints / (100 + maxLevel * 2)) * 100);
 
-  // Crear elementos
-  const cartel = document.createElement("div");
-  const container = document.createElement("div");
-  const titulo = document.createElement("h1");
-  const mensaje = document.createElement("p");
-  const grid = document.createElement("div");
-  const btnReiniciar = document.createElement("button");
+  const victoryPopup = document.createElement("div");
+  const popupContainer = document.createElement("div");
+  const popupTitle = document.createElement("h1");
+  const popupMessage = document.createElement("p");
+  const statsGrid = document.createElement("div");
+  const podium = document.createElement("button");
 
-  // Configurar clases (estilos en CSS)
-  cartel.className = "cartel-final";
-  container.className = "estadisticas-container";
-  grid.className = "estadisticas-grid";
-  btnReiniciar.className = "boton-reiniciar";
+  victoryPopup.className = "victory-popup";
+  popupContainer.className = "victory-container";
+  statsGrid.className = "stats-grid";
+  podium.className = "restart-button";
 
-  // Configurar contenido
-  titulo.textContent = "🎉 ¡Felicidades! 🎉";
-  mensaje.textContent = "¡Completaste todos los niveles del juego!";
-  btnReiniciar.textContent = "Jugar de nuevo";
+  popupTitle.textContent = "🎉 ¡Felicidades! 🎉";
+  popupMessage.textContent = "¡Completaste todos los niveles del juego!";
+  podium.textContent = "Ver Podio";
 
-  // Crear estadísticas
-  const crearEstadistica = (icono, valor, tituloText) => {
-    const stat = document.createElement("div");
-    const icon = document.createElement("span");
-    const value = document.createElement("span");
-    const title = document.createElement("span");
+  const createStatElement = (icon, value, title) => {
+    const statElement = document.createElement("div");
+    const iconElement = document.createElement("span");
+    const valueElement = document.createElement("span");
+    const titleElement = document.createElement("span");
 
-    stat.className = "estadistica";
-    icon.className = "estadistica-icono";
-    value.className = "estadistica-valor";
-    title.className = "estadistica-titulo";
+    statElement.className = "stat-element";
+    iconElement.className = "stat-icon";
+    valueElement.className = "stat-value";
+    titleElement.className = "stat-title";
 
-    icon.textContent = icono;
-    value.textContent = valor;
-    title.textContent = tituloText;
+    iconElement.textContent = icon;
+    valueElement.textContent = value;
+    titleElement.textContent = title;
 
-    stat.appendChild(icon);
-    stat.appendChild(value);
-    stat.appendChild(title);
+    statElement.appendChild(iconElement);
+    statElement.appendChild(valueElement);
+    statElement.appendChild(titleElement);
 
-    return stat;
+    return statElement;
   };
 
-  // Añadir estadísticas al grid
-  grid.appendChild(crearEstadistica("🏆", puntos, "Puntos totales"));
-  grid.appendChild(crearEstadistica("💔", vidasPerdidas, "Vidas perdidas"));
-  grid.appendChild(crearEstadistica("📈", `${eficiencia}%`, "Eficiencia"));
-  grid.appendChild(
-    crearEstadistica("🚀", `${nivelMaximo}/5`, "Nivel alcanzado")
+  statsGrid.appendChild(createStatElement("🏆", scorePoints, "Puntos totales"));
+  statsGrid.appendChild(createStatElement("💔", livesLost, "Vidas perdidas"));
+  statsGrid.appendChild(
+    createStatElement("📈", `${efficiency}%`, "Eficiencia")
+  );
+  statsGrid.appendChild(
+    createStatElement("🚀", `${maxLevel}/5`, "Nivel alcanzado")
   );
 
-  // Configurar botón
-  btnReiniciar.onclick = () => {
-    cartel.remove();
-    vidasRestantes = 5;
-    puntos = 0;
-    const DOM = document.querySelector("#root");
-    DOM.innerHTML = "";
-    cargarDOM();
+  podium.onclick = () => {
+    victoryPopup.remove();
+    remainingLives = 5;
+    scorePoints = 0;
+    const mainContent = document.querySelector("#root");
+    mainContent.innerHTML = "";
+    mainContent.appendChild(resultado());
   };
 
-  // Ensamblar todo
-  container.appendChild(titulo);
-  container.appendChild(mensaje);
-  container.appendChild(grid);
-  container.appendChild(btnReiniciar);
-  cartel.appendChild(container);
-  document.body.appendChild(cartel);
+  popupContainer.appendChild(popupTitle);
+  popupContainer.appendChild(popupMessage);
+  popupContainer.appendChild(statsGrid);
+  popupContainer.appendChild(podium);
+  victoryPopup.appendChild(popupContainer);
+  document.body.appendChild(victoryPopup);
 }
 
-function mostrarCartelVidaPerdida(callback) {
-  const cartel = document.createElement("div");
-  cartel.className = "cartel-vida-perdida";
-  cartel.innerHTML = `
+function showLifeLostMessage(callback) {
+  const lifeLostPopup = document.createElement("div");
+  lifeLostPopup.className = "life-lost-popup";
+  lifeLostPopup.innerHTML = `
       <h2>💔 ¡Perdiste una vida!</h2>
       <p>¡Inténtalo de nuevo!</p>
-      <button id="btn-reintentar">Reintentar nivel</button>
+      <button id="retry-level-btn">Reintentar nivel</button>
   `;
 
-  document.body.appendChild(cartel);
+  document.body.appendChild(lifeLostPopup);
 
-  document.querySelector("#btn-reintentar").onclick = () => {
-    cartel.remove();
-    callback(); // Esto vuelve a iniciar el nivel
+  document.querySelector("#retry-level-btn").onclick = () => {
+    lifeLostPopup.remove();
+    callback();
   };
 }
 
-function mostrarCartelGameOver() {
-  const cartel = document.createElement("div");
-  cartel.className = "cartel-gameover";
+function showGameOverMessage() {
+  const gameOverPopup = document.createElement("div");
+  gameOverPopup.className = "game-over-popup";
 
-  cartel.innerHTML = `
+  gameOverPopup.innerHTML = `
       <h1>💔 ¡Game Over!</h1>
       <p>Se te acabaron las vidas, pero puedes volver a intentarlo.</p>
-      <button id="btn-reiniciar">Reiniciar Juego</button>
+      <button id="restart-game-btn">Reiniciar Juego</button>
   `;
 
-  document.body.appendChild(cartel);
+  document.body.appendChild(gameOverPopup);
 
-  document.querySelector("#btn-reiniciar").onclick = () => {
-    cartel.remove();
-    vidasRestantes = 5;
-    puntos = 0;
-    const DOM = document.querySelector("#root");
-    DOM.innerHTML = "";
-    cargarDOM();
+  document.querySelector("#restart-game-btn").onclick = () => {
+    gameOverPopup.remove();
+    remainingLives = 5;
+    scorePoints = 0;
+    const gameContainer = document.querySelector("#root");
+    gameContainer.innerHTML = "";
+    memoriaGame();
   };
 }
 
-juegoMemoria();
+memoriaGame();
 
-export { juegoMemoria };
+export { memoriaGame };

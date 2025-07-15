@@ -1,5 +1,5 @@
 import { pantalla_carga } from "../carga/cargaView.js";
-import { juegoMemoria } from "../memoria/memoriaView.js";
+import { memoriaGame } from "../memoria/memoriaView.js";
 import { getSocket, conectarSocket } from "../../../socketManager.js";
 import { AuthService } from "../../../authService.js";
 
@@ -296,7 +296,7 @@ export function cargarFormularioMemoria() {
               DOM.innerHTML = "";
               const parejas = 4 + (parseInt(data.nivel) - 1) * 2;
               DOM.appendChild(
-                juegoMemoria(parejas, data.dificultad, data.numero_jugadores)
+                memoriaGame(parejas, data.dificultad, data.numero_jugadores)
               );
             });
 
