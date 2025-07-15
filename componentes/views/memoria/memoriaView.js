@@ -1,6 +1,6 @@
 import { resultado } from "../resultados/resultados.js";
 
-function memoriaGame() {
+async function memoriaGame() {
   let gameContainer = document.querySelector("#root");
   gameContainer.className = "memory-game-container";
 

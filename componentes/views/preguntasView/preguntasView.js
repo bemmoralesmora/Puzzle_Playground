@@ -5,7 +5,6 @@ export function juego(nivel) {
   const container = document.createElement("div");
   container.className = "juego-container";
 
-  // Iniciar directamente el juego con el nivel seleccionado
   iniciarJuego(nivel);
 
   async function iniciarJuego(nivel) {
@@ -24,24 +23,54 @@ export function juego(nivel) {
     const preguntasFiltradas = preguntas.filter((p) => p.nivel === nivel);
     let indice = 0;
     let puntaje = 0;
+    let tiempoRestante = 120; // 2 minutos
+    let intervaloTiempo;
+
+    // Panel de info superior (tiempo y puntos)
+    const infoJuego = document.createElement("div");
+    infoJuego.className = "info-juego";
+
+    const tiempoDiv = document.createElement("div");
+    tiempoDiv.className = "tiempo-juego";
+    tiempoDiv.textContent = `⏳ Tiempo: ${tiempoRestante}s`;
+    infoJuego.appendChild(tiempoDiv);
+
+    const puntosDiv = document.createElement("div");
+    puntosDiv.className = "puntos-juego";
+    puntosDiv.textContent = `🏆 Puntos: ${puntaje}`;
+    infoJuego.appendChild(puntosDiv);
+
+    container.appendChild(infoJuego);
+
+    // Temporizador global
+    intervaloTiempo = setInterval(() => {
+      tiempoRestante--;
+      tiempoDiv.textContent = `⏳ Tiempo: ${tiempoRestante}s`;
+      if (tiempoRestante <= 0) {
+        clearInterval(intervaloTiempo);
+        mostrarFinal(puntaje, preguntasFiltradas.length);
+      }
+    }, 1000);
 
     function mostrarPregunta() {
       if (indice >= preguntasFiltradas.length) {
+        clearInterval(intervaloTiempo);
         mostrarFinal(puntaje, preguntasFiltradas.length);
         return;
       }
 
       const actual = preguntasFiltradas[indice];
-      container.innerHTML = "";
+      const preguntaDiv = document.createElement("div");
+      preguntaDiv.className = "pregunta-container";
 
       const titulo = document.createElement("h2");
       titulo.className = "pregunta";
       titulo.textContent = `Pregunta ${indice + 1}: ${actual.texto}`;
-      container.appendChild(titulo);
+      preguntaDiv.appendChild(titulo);
 
       const opcionesContainer = document.createElement("div");
       opcionesContainer.className = "opciones";
-      container.appendChild(opcionesContainer);
+      preguntaDiv.appendChild(opcionesContainer);
 
       actual.opciones.forEach((opcion, i) => {
         const btn = document.createElement("button");
@@ -51,52 +80,30 @@ export function juego(nivel) {
           const correcta = i === actual.correcta;
           btn.classList.add(correcta ? "correcta" : "incorrecta");
 
-          if (correcta) puntaje++;
+          if (correcta) {
+            puntaje++;
+            puntosDiv.textContent = `🏆 Puntos: ${puntaje}`;
+          }
 
           const botones = opcionesContainer.querySelectorAll("button");
           botones.forEach((b) => (b.disabled = true));
 
           setTimeout(() => {
             indice++;
+            container.removeChild(preguntaDiv);
             mostrarPregunta();
           }, 1500);
         };
         opcionesContainer.appendChild(btn);
       });
+
+      container.appendChild(preguntaDiv);
     }
 
     mostrarPregunta();
   }
 
-  function guardarPuntaje(puntaje, nivel) {
-    const puntajes = JSON.parse(localStorage.getItem('puntajes')) || {};
-    const puntajesNivel = puntajes[nivel] || [];
-    
-    puntajesNivel.push({
-      puntaje: puntaje,
-      fecha: new Date().toISOString()
-    });
-
-    // Mantener solo los últimos 10 puntajes para evitar acumular muchos datos
-    if (puntajesNivel.length > 10) {
-      puntajesNivel.shift();
-    }
-
-    puntajes[nivel] = puntajesNivel;
-    localStorage.setItem('puntajes', JSON.stringify(puntajes));
-  }
-
-  function obtenerMejoresPuntajes(nivel) {
-    const puntajes = JSON.parse(localStorage.getItem('puntajes')) || {};
-    const puntajesNivel = puntajes[nivel] || [];
-    
-    // Ordenar de mayor a menor y tomar los primeros 3
-    return puntajesNivel
-      .sort((a, b) => b.puntaje - a.puntaje)
-      .slice(0, 3);
-  }
-
-  function mostrarFinal(correctas, total) {
+  function mostrarFinal(correctas, total, tiempoInicio) {
     container.innerHTML = "";
 
     const titulo = document.createElement("h2");
@@ -106,116 +113,26 @@ export function juego(nivel) {
 
     const mensaje = document.createElement("div");
     mensaje.className = "mensaje-final";
-    mensaje.textContent = `Obtuviste ${correctas} de ${total} preguntas correctas.`;
+    mensaje.textContent = `Obtuviste ${correctas} puntos.`;
     container.appendChild(mensaje);
 
-    // Guardar el puntaje actual
-    guardarPuntaje(correctas, nivel);
-
-    // Obtener los mejores puntajes
-    const mejoresPuntajes = obtenerMejoresPuntajes(nivel);
-
-    // Gráfico de resultados actuales
-    const graficaActualDiv = document.createElement("div");
-    graficaActualDiv.className = "grafica";
-    const tituloActual = document.createElement("h3");
-    tituloActual.textContent = "Tu resultado:";
-    graficaActualDiv.appendChild(tituloActual);
-    
-    const canvasActual = document.createElement("canvas");
-    canvasActual.id = "graficoResultadosActual";
-    graficaActualDiv.appendChild(canvasActual);
-    container.appendChild(graficaActualDiv);
-
-    const incorrectas = total - correctas;
-    new Chart(canvasActual, {
-      type: "bar",
-      data: {
-        labels: ["Correctas", "Incorrectas"],
-        datasets: [{
-          label: "Respuestas",
-          data: [correctas, incorrectas],
-          backgroundColor: ["#2ecc71", "#e74c3c"],
-        }],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              stepSize: 1,
-            },
-            max: total,
-          },
-        },
-      },
-    });
-
-    // Gráfico de mejores puntajes (solo si hay datos)
-    if (mejoresPuntajes.length > 0) {
-      const mejoresDiv = document.createElement("div");
-      mejoresDiv.className = "grafica";
-      const tituloMejores = document.createElement("h3");
-      tituloMejores.textContent = "Mejores puntajes:";
-      mejoresDiv.appendChild(tituloMejores);
-      
-      const canvasMejores = document.createElement("canvas");
-      canvasMejores.id = "graficoMejoresPuntajes";
-      mejoresDiv.appendChild(canvasMejores);
-      container.appendChild(mejoresDiv);
-
-      // Preparar datos para el gráfico
-      const labels = mejoresPuntajes.map((_, i) => `Top ${i + 1}`);
-      const data = mejoresPuntajes.map(p => p.puntaje);
-      const fechas = mejoresPuntajes.map(p => new Date(p.fecha).toLocaleDateString());
-
-      new Chart(canvasMejores, {
-        type: "bar",
-        data: {
-          labels: labels,
-          datasets: [{
-            label: "Puntaje",
-            data: data,
-            backgroundColor: [
-              "#f1c40f", // Oro
-              "#95a5a6", // Plata
-              "#cd7f32"  // Bronce
-            ],
-          }],
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                stepSize: 1,
-              },
-              max: total,
-            },
-          },
-          plugins: {
-            tooltip: {
-              callbacks: {
-                afterLabel: function(context) {
-                  const index = context.dataIndex;
-                  return `Fecha: ${fechas[index]}`;
-                }
-              }
-            }
-          }
-        },
-      });
-    }
+    const tiempoTotal = Math.floor((Date.now() - tiempoInicio) / 1000);
+    const tiempoDiv = document.createElement("div");
+    tiempoDiv.className = "tiempo-final";
+    tiempoDiv.textContent = `⏱️ Tiempo: ${tiempoTotal} segundos`;
+    container.appendChild(tiempoDiv);
 
     const reiniciarBtn = document.createElement("button");
     reiniciarBtn.textContent = "Volver al inicio";
     reiniciarBtn.className = "btn-opcion";
     reiniciarBtn.onclick = () => {
-      window.location.reload();
+      mostrarInicio();
     };
     container.appendChild(reiniciarBtn);
+  }
+
+  if (!nivel) {
+    mostrarInicio();
   }
 
   return container;

@@ -10,30 +10,41 @@ export async function resultado() {
   const botones = document.createElement("div");
   botones.className = "botones-podio";
 
-  // Botón para volver al inicio
   const botonInicio = document.createElement("button");
-  botonInicio.textContent = "🏠 Inicio";
+  botonInicio.textContent = "Inicio";
   botonInicio.className = "boton-inicio";
   botonInicio.onclick = () => {
     mostrarInicio();
   };
 
-  // Botón para ver todos los resultados
   const botonVerResultados = document.createElement("button");
-  botonVerResultados.textContent = "📋 Ver todos los resultados";
+  botonVerResultados.textContent = "Todos los resultados";
   botonVerResultados.className = "boton-resultados";
   botonVerResultados.onclick = () => {
-    verTodosLosResultados(); // Debes definir esta función
+    verTodosLosResultados();
+  };
+
+  const botonGuardar = document.createElement("button");
+  botonGuardar.textContent = "Guardar imagen";
+  botonGuardar.className = "boton-guardar";
+  botonGuardar.onclick = () => {
+    html2canvas(contenedor).then((canvas) => {
+      const link = document.createElement("a");
+      link.download = "podio.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
   };
 
   botones.appendChild(botonInicio);
   botones.appendChild(botonVerResultados);
+  botones.appendChild(botonGuardar); // 📸
 
   const idPartida = localStorage.getItem("id_partida");
 
   try {
     const response = await fetch(
-      `https://backend-game-mnte.onrender.com/api/partidas/resultados/${idPartida}`
+      `https://backend-game-mnte.onrender.com/api/partidas/podio/${idPartida}`
     );
     const data = await response.json();
 
@@ -48,7 +59,6 @@ export async function resultado() {
           <p>${jugador.puntos_obtenidos} pts</p>
           <p>${jugador.correctas || "-"} correctas</p>
         `;
-
         podio.appendChild(columna);
       });
     } else {
@@ -72,6 +82,28 @@ async function verTodosLosResultados() {
 
   const idPartida = localStorage.getItem("id_partida");
 
+  const botonInicio = document.createElement("button");
+  botonInicio.textContent = "Inicio";
+  botonInicio.className = "boton-inicio";
+  botonInicio.onclick = () => {
+    mostrarInicio();
+  };
+
+  const botonGuardar = document.createElement("button");
+  botonGuardar.textContent = "Guardar imagen";
+  botonGuardar.className = "boton-guardar";
+  botonGuardar.onclick = () => {
+    html2canvas(contenedorResultados).then((canvas) => {
+      const link = document.createElement("a");
+      link.download = "resultados_partida.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
+  };
+
+  contenedorResultados.appendChild(botonInicio);
+  contenedorResultados.appendChild(botonGuardar); // 📸
+
   try {
     const response = await fetch(
       `https://backend-game-mnte.onrender.com/api/partidas/resultados/${idPartida}`
@@ -86,18 +118,16 @@ async function verTodosLosResultados() {
         resultadoDiv.innerHTML = `
           <h4>#${index + 1} - ${resultado.nombre}</h4>
           <p>🎯 Puntos: ${resultado.puntos_obtenidos}</p>
-          <p>✅ Correctas: ${resultado.correctas || "-"}</p>
-          <p>🗓️ Fecha: ${new Date(resultado.fecha).toLocaleDateString()}</p>
         `;
 
         contenedorResultados.appendChild(resultadoDiv);
       });
     } else {
-      contenedorResultados.innerHTML = "<p>No hay resultados disponibles.</p>";
+      contenedorResultados.innerHTML += "<p>No hay resultados disponibles.</p>";
     }
   } catch (error) {
     console.error("Error al obtener resultados:", error);
-    contenedorResultados.innerHTML = "<p>Error al cargar los resultados.</p>";
+    contenedorResultados.innerHTML += "<p>Error al cargar los resultados.</p>";
   }
 
   mainContent.innerHTML = "";
