@@ -23,8 +23,8 @@ export async function resultado() {
   const botonVerResultados = document.createElement("button");
   botonVerResultados.textContent = "Todos los resultados";
   botonVerResultados.className = "boton-resultados";
-  botonVerResultados.onclick = () => {
-    verTodosLosResultados();
+  botonVerResultados.onclick = async () => {
+    await verTodosLosResultados();
   };
 
   const botonGuardar = document.createElement("button");
