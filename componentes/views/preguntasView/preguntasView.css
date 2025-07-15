@@ -1,314 +1,327 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 
-/* Estilos globales */
-.juego-memoria {
-  margin: 0;
-  background-size: cover;
-  background-position: center;
-  font-family: 'Comic Sans MS', cursive, sans-serif; /* Fuente caricaturesca */
-  color: #fff;
+/* Variables CSS para colores y estilos */
+:root {
+  --primary-color: #ff9900;
+  --primary-dark: #cc6600;
+  --secondary-color: #ffcc00;
+  --correct-color: #2ecc71;
+  --incorrect-color: #e74c3c;
+  --info-color: #3498db;
+  --text-light: #ffffff;
+  --text-dark: #333333;
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.2);
+  --shadow-glow: 0 0 10px currentColor;
+  --border-radius: 12px;
+  --transition: all 0.3s ease;
+}
+
+body {
+  font-family: "Bungee", sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Contenedor principal del juego */
+.juego-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-}
-
-.juego-memoria.juego {
-  background-image: url('https://wallpapers.com/images/hd/cuphead-and-beppi-the-clown-m5h8hdbjktxsva50.jpg');
-}
-
-.juego-memoria.final {
-  background-image: url('https://wallpapers.com/images/hd/cuphead-and-beppi-the-clown-m5h8hdbjktxsva50.jpg'); /* Imagen de fondo para la pantalla de resultados */
+  min-height: 100vh;
   background-size: cover;
   background-position: center;
-}
-/* Contenedor principal */
-.juego-memoria #root {
-  width: 90%;
-  max-width: 600px;
+  background-repeat: no-repeat;
+  position: relative;
+  text-align: center;
 }
 
-.juego-memoria .juego-container {
-  background-color: #f4f4f4; /* Fondo sólido */
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
-  text-align: center;
-  border: 8px solid #ff9900; /* Bordes naranja */
-  max-width: 600px;
-  width: 90%;
+.juego-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--blue-claro);
+  z-index: 0;
+}
+
+.juego-container > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Contenido del juego */
+.juego-content {
+  width: 100%;
+  max-width: 800px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: var(--border-radius);
+  padding: 30px;
+  box-shadow: var(--shadow-md);
+  margin: 20px;
 }
 
 /* Títulos */
-.juego-memoria .titulo-inicio,
-.juego-memoria .titulo-seleccion {
-  font-size: 2.5em;
-  margin-bottom: 20px;
-  color: #ff9900;
-  text-shadow: 0 0 10px #ff9900, 0 0 20px #cc6600;
+.pregunta,
+.mensaje-final {
+  color: var(--text-dark);
+  margin-bottom: 25px;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* Imagen en la pantalla de inicio */
-.juego-memoria .imagen-inicio {
-  width: 100%;
-  max-width: 400px;
-  margin: 20px auto;
-  display: block;
-  border-radius: 15px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+.pregunta {
+  font-size: 2rem;
+  line-height: 1.3;
+}
+
+.mensaje-final {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+}
+
+/* Contenedor de opciones */
+.opciones {
+  display: flex;
+  gap: 15px;
+  margin: 30px 0;
+  list-style: none;
 }
 
 /* Botones */
-.juego-memoria .btn-inicio,
-.juego-memoria .btn-nivel,
-.juego-memoria .btn-opcion,
-.juego-memoria .volver-jugar,
-.juego-memoria .descargar {
-  padding: 15px 30px;
-  font-size: 1.5em;
+.btn-opcion {
+  width: 100%;
+  padding: 15px 20px;
+  font-size: 1.1rem;
+  font-weight: 500;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
+  background-color: var(--amarillo);
+  color: var(--text-dark);
   cursor: pointer;
-  transition: transform 0.2s, background-color 0.3s;
-  box-shadow: 0 0 10px #ff9900, 0 0 20px #cc6600;
-}
-
-.juego-memoria .btn-inicio,
-.juego-memoria .btn-nivel {
-  background-color: #ff9900;
-  color: white;
-}
-
-.juego-memoria .btn-inicio:hover,
-.juego-memoria .btn-nivel:hover {
-  background-color: #cc6600;
-  transform: scale(1.05);
-}
-
-.juego-memoria .btn-opcion {
-  width: 100%; /* Asegurar que todos los botones tengan el mismo ancho */
-  max-width: 300px; /* Limitar el ancho máximo */
-  padding: 15px; /* Espaciado interno */
-  font-size: 1.2em; /* Tamaño de fuente */
-  border: none;
-  border-radius: 10px;
-  background-color: #ffcc00; /* Color dorado */
-  color: #333; /* Texto oscuro */
-  cursor: pointer;
-  transition: transform 0.2s, background-color 0.3s;
-  box-shadow: 0 0 10px #ffcc00, 0 0 20px #ff9900; /* Efecto brillante */
-}
-
-.juego-memoria .btn-opcion:hover {
-  background-color: #ff9900; /* Color más oscuro al pasar el mouse */
-  transform: scale(1.05);
-  box-shadow: 0 0 15px #ff9900, 0 0 30px #cc6600; /* Efecto más brillante */
-}
-
-/* Respuesta correcta */
-.juego-memoria .btn-opcion.correcta {
-  background-color: #2ecc71; /* Verde */
-  color: white; /* Texto blanco */
-  box-shadow: 0 0 15px #2ecc71, 0 0 30px #27ae60; /* Efecto brillante */
-  cursor: default; /* Cambiar el cursor para indicar que no es clickeable */
-}
-
-/* Respuesta incorrecta */
-.juego-memoria .btn-opcion.incorrecta {
-  background-color: #e74c3c; /* Rojo */
-  color: white; /* Texto blanco */
-  box-shadow: 0 0 15px #e74c3c, 0 0 30px #c0392b; /* Efecto brillante */
-  cursor: default; /* Cambiar el cursor para indicar que no es clickeable */
-}
-
-.juego-memoria .volver-jugar {
-  background-color: #ff9900;
-  color: white;
-  margin-top: 20px;
-}
-
-.juego-memoria .volver-jugar:hover {
-  background-color: #cc6600;
-  transform: scale(1.05);
-}
-
-.juego-memoria .descargar {
-  background-color: #3498db; /* Azul */
-  color: white;
-  margin-top: 20px;
-  box-shadow: 0 0 10px #3498db, 0 0 20px #2980b9;
-}
-
-.juego-memoria .descargar:hover {
-  background-color: #2980b9;
-  transform: scale(1.05);
-}
-
-/* Panel de información */
-.juego-memoria .info-panel {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding: 10px 20px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 15px;
-  box-shadow: 0 0 10px #ff9900;
-  font-size: 1.3em;
-  font-weight: bold;
-  color: #333;
-}
-
-.juego-memoria .tiempo {
-  color: #000; /* Color negro */
-  font-weight: bold;
-  text-shadow: none;
-}
-
-.juego-memoria .puntaje {
-  color: #2ecc71; /* Verde para el puntaje */
-  font-weight: bold;
-  text-shadow: 0 0 5px #2ecc71;
-}
-
-/* Preguntas */
-.juego-memoria .pregunta {
-  font-size: 2em;
-  color: #000; /* Cambiar el color del texto a negro */
-  margin-bottom: 20px;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
   text-align: center;
+
+  font-family: "Bungee", sans-serif;
+  font-weight: 400;
+  font-size: 15px;
 }
 
-/* Opciones */
-.juego-memoria .opciones {
-  list-style: none; /* Eliminar los puntos de la lista */
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column; /* Mostrar las opciones en una lista vertical */
-  gap: 15px; /* Espaciado entre las opciones */
+.btn-opcion:hover:not(.correcta):not(.incorrecta) {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.juego-memoria .opciones li {
-  display: flex;
-  justify-content: center;
+.btn-opcion:active:not(.correcta):not(.incorrecta) {
+  transform: translateY(0);
 }
 
-/* Mensajes */
-.juego-memoria .mensaje-final {
-  font-size: 2em;
-  color: #ff9900;
-  margin-top: 30px;
-  text-shadow: 0 0 10px #ff9900, 0 0 20px #cc6600;
+/* Estados de los botones */
+.btn-opcion.correcta {
+  background-color: var(--correct-color);
+  color: var(--text-light);
+  box-shadow: 0 0 15px var(--correct-color);
+  cursor: not-allowed;
 }
 
-/* Gráfica */
-.juego-memoria .grafica {
-  margin-top: 30px;
-  background-color: #fff;
+.btn-opcion.incorrecta {
+  background-color: var(--incorrect-color);
+  color: var(--text-light);
+  box-shadow: 0 0 15px var(--incorrect-color);
+  cursor: not-allowed;
+}
+
+/* Gráficas */
+.grafica {
+  background-color: var(--text-light);
+  border-radius: var(--border-radius);
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  margin: 30px 0;
+  box-shadow: var(--shadow-sm);
 }
 
-.juego-memoria #graficoResultados {
-  max-width: 100%;
+.grafica h3 {
+  color: var(--text-dark);
+  margin-bottom: 15px;
+  font-size: 1.3rem;
 }
 
-/* Responsive para pantallas pequeñas (375px, como iPhone) */
-@media (max-width: 375px) {
-  .juego-memoria {
-    font-size: 14px;
-  }
-
-  .juego-memoria .juego-container {
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 90%;
-  }
-
-  .juego-memoria .pregunta {
-    font-size: 1.8em;
-  }
-
-  .juego-memoria .btn-opcion {
-    font-size: 1.2em;
-    padding: 10px 15px;
-  }
-
-  .juego-memoria .info-panel {
-    flex-direction: column;
-    gap: 10px;
-    font-size: 1em;
-  }
-
-  .juego-memoria .volver-jugar {
-    font-size: 1.2em;
-    padding: 10px 20px;
-  }
-
-  .juego-memoria .grafica {
-    padding: 10px;
-  }
-
-  .juego-memoria #graficoResultados {
-    max-width: 100%;
-    height: auto;
-  }
+/* Botón reiniciar */
+.reiniciar-btn {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 20px;
+  box-shadow: var(--shadow-sm);
 }
 
-/* Responsive para pantallas medianas (768px, como iPad) */
+.reiniciar-btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Diseño responsivo */
 @media (max-width: 768px) {
-  .juego-memoria {
-    font-size: 16px;
+  .juego-content {
+    padding: 20px;
+    margin: 15px;
   }
 
-  .juego-memoria .juego-container {
-    padding: 30px;
-    border-radius: 15px;
-    max-width: 80%;
+  .pregunta {
+    font-size: 1.6rem;
   }
 
-  .juego-memoria .pregunta {
-    font-size: 2em;
+  .mensaje-final {
+    font-size: 1.4rem;
   }
 
-  .juego-memoria .btn-opcion {
-    font-size: 1.3em;
-    padding: 12px 20px;
+  .btn-opcion {
+    padding: 12px 15px;
+    font-size: 1rem;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .juego-content {
+    padding: 15px;
+    margin: 10px;
   }
 
-  .juego-memoria .info-panel {
-    font-size: 1.2em;
+  .pregunta {
+    font-size: 1.4rem;
   }
 
-  .juego-memoria .volver-jugar {
-    font-size: 1.3em;
-    padding: 12px 25px;
+  .mensaje-final {
+    font-size: 1.2rem;
   }
 
-  .juego-memoria .grafica {
+  .grafica {
     padding: 15px;
   }
 
-  .juego-memoria #graficoResultados {
-    max-width: 100%;
-    height: auto;
+  .reiniciar-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
   }
 }
 
-.juego-memoria {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 20px;
-  min-height: 100vh;
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.juego-memoria .niveles-container {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.juego-content {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.btn-opcion {
+  animation: fadeIn 0.3s ease-out;
+  animation-fill-mode: backwards;
+}
+
+.btn-opcion:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.btn-opcion:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.btn-opcion:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.btn-opcion:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+/* Contenedor del resultado final */
+.pregunta {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #ffffff;
+  font-family: "Bungee", sans-serif;
+}
+
+/* Mensaje del puntaje final */
+.mensaje-final {
+  font-size: 1.8rem;
+  background-color: #2ecc71;
+  color: white;
+  text-align: center;
+  padding: 15px 25px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+  font-family: "Bungee", sans-serif;
+}
+
+/* Tiempo final */
+.tiempo-final {
+  font-size: 1.4rem;
+  background-color: #3498db;
+  color: white;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  font-family: "Bungee", sans-serif;
+}
+
+/* Botón de volver al inicio */
+.btn-opcion {
+  display: block;
+  margin: 0 auto;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  background-color: #f39c12;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: "Bungee", sans-serif;
+}
+
+.btn-opcion:hover {
+  background-color: #e67e22;
+}
+
+.tiempo-juego {
+  background-color: #e74c3c;
+  padding: 8px 16px;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.puntos-juego {
+  background-color: #2ecc71;
+  padding: 8px 16px;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.pregunta-container {
   margin-top: 20px;
 }

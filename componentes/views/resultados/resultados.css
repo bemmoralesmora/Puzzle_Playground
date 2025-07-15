@@ -105,9 +105,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
 }
 
 .botones-podio button:hover {
+  background-color: var(--beige);
+}
+
+.boton-inicio,
+.boton-guardar {
+  all: unset;
+  width: 18rem;
+  height: 5rem;
+  border-radius: 1rem;
+
+  font-family: "Bungee", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 15px;
+  background-color: var(--rojo-sangre);
+  color: var(--beige);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.boton-inicio:hover {
+  background-color: var(--beige);
+}
+
+.boton-guardar:hover {
   background-color: var(--beige);
 }
 

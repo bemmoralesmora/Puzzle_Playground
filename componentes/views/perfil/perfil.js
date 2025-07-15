@@ -3,14 +3,17 @@ async function perfil(idUsuario) {
   perfil.className = "perfil";
 
   // Fetch de la info del usuario
-  const baseURL = "https://backend-game-mnte.onrender.com/api/usuarios";
   let userInfo, logrosInfo, partidasInfo;
 
   try {
     const [resUsuario, resLogros, resPartidas] = await Promise.all([
-      fetch(`${baseURL}/${idUsuario}`),
-      fetch(`${baseURL}/logros/${idUsuario}`),
-      fetch(`${baseURL}/partidas/${idUsuario}`),
+      fetch(`https://backend-game-mnte.onrender.com/api/usuarios/${idUsuario}`),
+      fetch(
+        `https://backend-game-mnte.onrender.com/api/usuarios/logros/${idUsuario}`
+      ),
+      fetch(
+        `https://backend-game-mnte.onrender.com/api/usuarios/partidas/${idUsuario}`
+      ),
     ]);
 
     if (!resUsuario.ok) throw new Error("Usuario no encontrado");
@@ -65,7 +68,8 @@ async function perfil(idUsuario) {
 
   const nombre = document.createElement("h1");
   nombre.className = "nombre";
-  nombre.textContent = userInfo.nombre;
+  nombre.textContent =
+    userInfo.nombre_perfil || userInfo.nombre_login || "Sin nombre";
   datos_personales.appendChild(nombre);
 
   const descripcion = document.createElement("h2");
