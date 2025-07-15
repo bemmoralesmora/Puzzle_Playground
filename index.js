@@ -6,6 +6,7 @@ import { perfil } from "./componentes/views/perfil/perfil.js";
 import { jugar_amigos } from "./componentes/views/amigos/amigos.js";
 import { crear_partida } from "./componentes/views/crear_partida/crear_partida.js";
 import { juego } from "./componentes/views/preguntasView/preguntasView.js";
+import { resultado } from "./componentes/views/resultados/resultados.js";
 
 // Elementos globales
 const DOM = document.querySelector("#root");
