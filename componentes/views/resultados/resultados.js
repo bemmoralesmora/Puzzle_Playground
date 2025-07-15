@@ -1,4 +1,5 @@
 import { mostrarInicio, cargarContenidoPrincipal } from "../../../index.js";
+import { escucharEventos, getSocket } from "../../../socketManager.js";
 
 export async function resultado() {
   const contenedor = document.createElement("div");
@@ -16,7 +17,6 @@ export async function resultado() {
   botonInicio.onclick = () => {
     const mainContent = document.querySelector("#root");
     mainContent.innerHTML = "";
-
     mainContent.appendChild(cargarContenidoPrincipal());
   };
 
@@ -52,18 +52,7 @@ export async function resultado() {
     const data = await response.json();
 
     if (data.success && data.podio.length > 0) {
-      data.podio.forEach((jugador, i) => {
-        const columna = document.createElement("div");
-        columna.className = `columna puesto-${i + 1}`;
-
-        columna.innerHTML = `
-          <div class="medalla">${i + 1}</div>
-          <h3>${jugador.nombre}</h3>
-          <p>${jugador.puntos_obtenidos} pts</p>
-          <p>${jugador.correctas || "-"} correctas</p>
-        `;
-        podio.appendChild(columna);
-      });
+      renderizarPodio(data.podio, podio);
     } else {
       podio.innerHTML =
         "<p>No hay suficientes datos para mostrar el podio.</p>";
@@ -73,9 +62,35 @@ export async function resultado() {
     podio.innerHTML = "<p>Error al cargar los resultados.</p>";
   }
 
+  // Escuchar actualizaciones en tiempo real del podio
+  const socket = getSocket();
+  if (socket) {
+    escucharEventos(socket, {
+      onActualizarPodio: (nuevoPodio) => {
+        renderizarPodio(nuevoPodio, podio);
+      },
+    });
+  }
+
   contenedor.appendChild(podio);
   contenedor.appendChild(botones);
   return contenedor;
+}
+
+// 👇 Función para renderizar el podio
+function renderizarPodio(podioData, podioDiv) {
+  podioDiv.innerHTML = "";
+  podioData.forEach((jugador, i) => {
+    const columna = document.createElement("div");
+    columna.className = `columna puesto-${i + 1}`;
+    columna.innerHTML = `
+      <div class="medalla">${i + 1}</div>
+      <h3>${jugador.nombre}</h3>
+      <p>${jugador.puntos_obtenidos} pts</p>
+      <p>${jugador.correctas || "-"} correctas</p>
+    `;
+    podioDiv.appendChild(columna);
+  });
 }
 
 async function verTodosLosResultados() {
@@ -91,7 +106,6 @@ async function verTodosLosResultados() {
   botonInicio.onclick = async () => {
     const mainContent = document.querySelector("#root");
     mainContent.innerHTML = "";
-
     mainContent.appendChild(cargarContenidoPrincipal());
   };
 
@@ -110,6 +124,21 @@ async function verTodosLosResultados() {
   contenedorResultados.appendChild(botonInicio);
   contenedorResultados.appendChild(botonGuardar); // 📸
 
+  const renderizarResultados = (resultados) => {
+    contenedorResultados
+      .querySelectorAll(".resultado-item")
+      .forEach((e) => e.remove());
+    resultados.forEach((resultado, index) => {
+      const resultadoDiv = document.createElement("div");
+      resultadoDiv.className = "resultado-item";
+      resultadoDiv.innerHTML = `
+        <h4>#${index + 1} - ${resultado.nombre}</h4>
+        <p>🎯 Puntos: ${resultado.puntos_obtenidos}</p>
+      `;
+      contenedorResultados.appendChild(resultadoDiv);
+    });
+  };
+
   try {
     const response = await fetch(
       `https://backend-game-mnte.onrender.com/api/partidas/resultados/${idPartida}`
@@ -117,23 +146,23 @@ async function verTodosLosResultados() {
     const data = await response.json();
 
     if (data.success && data.resultados.length > 0) {
-      data.resultados.forEach((resultado, index) => {
-        const resultadoDiv = document.createElement("div");
-        resultadoDiv.className = "resultado-item";
-
-        resultadoDiv.innerHTML = `
-          <h4>#${index + 1} - ${resultado.nombre}</h4>
-          <p>🎯 Puntos: ${resultado.puntos_obtenidos}</p>
-        `;
-
-        contenedorResultados.appendChild(resultadoDiv);
-      });
+      renderizarResultados(data.resultados);
     } else {
       contenedorResultados.innerHTML += "<p>No hay resultados disponibles.</p>";
     }
   } catch (error) {
     console.error("Error al obtener resultados:", error);
     contenedorResultados.innerHTML += "<p>Error al cargar los resultados.</p>";
+  }
+
+  // Escuchar actualizaciones del podio
+  const socket = getSocket();
+  if (socket) {
+    escucharEventos(socket, {
+      onActualizarPodio: (nuevoPodio) => {
+        renderizarResultados(nuevoPodio);
+      },
+    });
   }
 
   mainContent.innerHTML = "";
