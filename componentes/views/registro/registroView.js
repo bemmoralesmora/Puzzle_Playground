@@ -1,5 +1,5 @@
 import { Login } from "../login/loginView.js";
-import { cargarContenidoPrincipal } from "../../../index.js";
+import { cargarContenidoPrincipal, cargarLogin } from "../../../index.js";
 
 async function registrarUsuario(nombreCompleto, correo, contraseña) {
   try {
@@ -200,7 +200,7 @@ function cargarSignup() {
       await registrarUsuario(`${nombre} ${apellido}`, correo, contraseña);
 
       // Usamos tu función exportada de index.js para redirigir
-      cargarContenidoPrincipal();
+      cargarLogin();
     } catch (error) {
       errorMessage.textContent =
         error.message || "Error en el registro. Intenta nuevamente.";

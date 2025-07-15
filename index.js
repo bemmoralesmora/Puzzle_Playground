@@ -89,7 +89,7 @@ async function iniciarJuegoConCarga() {
   mainContent.appendChild(juegoContainer);
 }
 
-function cargarLogin() {
+export function cargarLogin() {
   DOM.innerHTML = "";
   DOM.className = "dom";
   DOM.appendChild(Login());
