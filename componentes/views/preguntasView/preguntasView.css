@@ -1,6 +1,34 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
 
-.juego-container {
+/* Estilos globales */
+.juego-memoria {
+  margin: 0;
+  background-size: cover;
+  background-position: center;
+  font-family: 'Comic Sans MS', cursive, sans-serif; /* Fuente caricaturesca */
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.juego-memoria.juego {
+  background-image: url('https://wallpapers.com/images/hd/cuphead-and-beppi-the-clown-m5h8hdbjktxsva50.jpg');
+}
+
+.juego-memoria.final {
+  background-image: url('https://wallpapers.com/images/hd/cuphead-and-beppi-the-clown-m5h8hdbjktxsva50.jpg'); /* Imagen de fondo para la pantalla de resultados */
+  background-size: cover;
+  background-position: center;
+}
+/* Contenedor principal */
+.juego-memoria #root {
+  width: 90%;
+  max-width: 600px;
+}
+
+.juego-memoria .juego-container {
   background-color: #f4f4f4; /* Fondo sólido */
   padding: 40px;
   border-radius: 20px;
@@ -11,124 +39,17 @@
   width: 90%;
 }
 
-.pregunta {
-  font-size: 2.5em;
-  margin-bottom: 30px;
-  color: #444; /* Color más oscuro */
-  text-shadow: 0 0 5px #ff9900, 0 0 10px #cc6600; /* Efecto brillante más suave */
-}
-
-.opciones {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.btn-opcion {
-  padding: 15px 20px;
-  font-size: 1.5em;
-  border: none;
-  border-radius: 15px;
-  background-color: #ffcc00; /* Color dorado */
-  color: #333; /* Texto oscuro */
-  cursor: pointer;
-  transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
-  box-shadow: 0 0 15px #ffcc00, 0 0 30px #ff9900; /* Efecto brillante */
-}
-
-.btn-opcion:hover {
-  background-color: #ff9900; /* Color más oscuro al pasar el mouse */
-  transform: scale(1.1);
-  box-shadow: 0 0 20px #ff9900, 0 0 40px #cc6600; /* Efecto más brillante */
-}
-
-.correcta {
-  background-color: #2ecc71 !important; /* Verde para respuestas correctas */
-  box-shadow: 0 0 15px #2ecc71, 0 0 30px #27ae60; /* Efecto brillante */
-}
-
-.incorrecta {
-  background-color: #e74c3c !important; /* Rojo para respuestas incorrectas */
-  box-shadow: 0 0 15px #e74c3c, 0 0 30px #c0392b; /* Efecto brillante */
-}
-
-.mensaje {
-  font-size: 1.8em;
-  margin-top: 20px;
-  height: 40px;
-  transition: all 0.3s ease;
-}
-
-.mensaje-correcto {
-  color: #2ecc71; /* Verde */
-  text-shadow: 0 0 10px #2ecc71, 0 0 20px #27ae60; /* Efecto brillante */
-}
-
-.mensaje-incorrecto {
-  color: #e74c3c; /* Rojo */
-  text-shadow: 0 0 10px #e74c3c, 0 0 20px #c0392b; /* Efecto brillante */
-}
-
-.mensaje-final {
-  font-size: 2em;
-  color: #ff9900; /* Naranja */
-  margin-top: 30px;
-  text-shadow: 0 0 10px #ff9900, 0 0 20px #cc6600; /* Efecto brillante */
-}
-
-.grafica {
-  margin-top: 30px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-}
-
-#graficoResultados {
-  max-width: 100%;
-}
-
-/* Estilo para la pantalla de inicio */
-.titulo-inicio {
-  font-size: 3em;
-  margin-bottom: 20px;
-  color: #ff9900; /* Color naranja */
-  text-shadow: 0 0 10px #ff9900, 0 0 20px #cc6600; /* Efecto brillante */
-}
-
-.titulo-seleccion {
+/* Títulos */
+.juego-memoria .titulo-inicio,
+.juego-memoria .titulo-seleccion {
   font-size: 2.5em;
   margin-bottom: 20px;
   color: #ff9900;
   text-shadow: 0 0 10px #ff9900, 0 0 20px #cc6600;
 }
 
-.btn-inicio {
-  padding: 15px 30px;
-  font-size: 1.5em;
-  border: none;
-  border-radius: 10px;
-  background-color: #ff9900; /* Color naranja */
-  color: white;
-  cursor: pointer;
-  transition: transform 0.2s, background-color 0.3s;
-  box-shadow: 0 0 10px #ff9900, 0 0 20px #cc6600; /* Efecto brillante */
-}
-
-.btn-inicio:hover {
-  background-color: #cc6600; /* Color más oscuro al pasar el mouse */
-  transform: scale(1.05);
-}
-
-.niveles-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
-
 /* Imagen en la pantalla de inicio */
-.imagen-inicio {
+.juego-memoria .imagen-inicio {
   width: 100%;
   max-width: 400px;
   margin: 20px auto;
@@ -137,20 +58,257 @@
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
 }
 
-.volver-jugar {
-  margin-top: 20px; /* Espaciado para separarlo de la gráfica */
+/* Botones */
+.juego-memoria .btn-inicio,
+.juego-memoria .btn-nivel,
+.juego-memoria .btn-opcion,
+.juego-memoria .volver-jugar,
+.juego-memoria .descargar {
   padding: 15px 30px;
   font-size: 1.5em;
   border: none;
   border-radius: 10px;
-  background-color: #ff9900; /* Color naranja */
-  color: white;
   cursor: pointer;
   transition: transform 0.2s, background-color 0.3s;
-  box-shadow: 0 0 10px #ff9900, 0 0 20px #cc6600; /* Efecto brillante */
+  box-shadow: 0 0 10px #ff9900, 0 0 20px #cc6600;
 }
 
-.volver-jugar:hover {
-  background-color: #cc6600; /* Color más oscuro al pasar el mouse */
+.juego-memoria .btn-inicio,
+.juego-memoria .btn-nivel {
+  background-color: #ff9900;
+  color: white;
+}
+
+.juego-memoria .btn-inicio:hover,
+.juego-memoria .btn-nivel:hover {
+  background-color: #cc6600;
   transform: scale(1.05);
+}
+
+.juego-memoria .btn-opcion {
+  width: 100%; /* Asegurar que todos los botones tengan el mismo ancho */
+  max-width: 300px; /* Limitar el ancho máximo */
+  padding: 15px; /* Espaciado interno */
+  font-size: 1.2em; /* Tamaño de fuente */
+  border: none;
+  border-radius: 10px;
+  background-color: #ffcc00; /* Color dorado */
+  color: #333; /* Texto oscuro */
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s;
+  box-shadow: 0 0 10px #ffcc00, 0 0 20px #ff9900; /* Efecto brillante */
+}
+
+.juego-memoria .btn-opcion:hover {
+  background-color: #ff9900; /* Color más oscuro al pasar el mouse */
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #ff9900, 0 0 30px #cc6600; /* Efecto más brillante */
+}
+
+/* Respuesta correcta */
+.juego-memoria .btn-opcion.correcta {
+  background-color: #2ecc71; /* Verde */
+  color: white; /* Texto blanco */
+  box-shadow: 0 0 15px #2ecc71, 0 0 30px #27ae60; /* Efecto brillante */
+  cursor: default; /* Cambiar el cursor para indicar que no es clickeable */
+}
+
+/* Respuesta incorrecta */
+.juego-memoria .btn-opcion.incorrecta {
+  background-color: #e74c3c; /* Rojo */
+  color: white; /* Texto blanco */
+  box-shadow: 0 0 15px #e74c3c, 0 0 30px #c0392b; /* Efecto brillante */
+  cursor: default; /* Cambiar el cursor para indicar que no es clickeable */
+}
+
+.juego-memoria .volver-jugar {
+  background-color: #ff9900;
+  color: white;
+  margin-top: 20px;
+}
+
+.juego-memoria .volver-jugar:hover {
+  background-color: #cc6600;
+  transform: scale(1.05);
+}
+
+.juego-memoria .descargar {
+  background-color: #3498db; /* Azul */
+  color: white;
+  margin-top: 20px;
+  box-shadow: 0 0 10px #3498db, 0 0 20px #2980b9;
+}
+
+.juego-memoria .descargar:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+/* Panel de información */
+.juego-memoria .info-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  box-shadow: 0 0 10px #ff9900;
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #333;
+}
+
+.juego-memoria .tiempo {
+  color: #000; /* Color negro */
+  font-weight: bold;
+  text-shadow: none;
+}
+
+.juego-memoria .puntaje {
+  color: #2ecc71; /* Verde para el puntaje */
+  font-weight: bold;
+  text-shadow: 0 0 5px #2ecc71;
+}
+
+/* Preguntas */
+.juego-memoria .pregunta {
+  font-size: 2em;
+  color: #000; /* Cambiar el color del texto a negro */
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Opciones */
+.juego-memoria .opciones {
+  list-style: none; /* Eliminar los puntos de la lista */
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column; /* Mostrar las opciones en una lista vertical */
+  gap: 15px; /* Espaciado entre las opciones */
+}
+
+.juego-memoria .opciones li {
+  display: flex;
+  justify-content: center;
+}
+
+/* Mensajes */
+.juego-memoria .mensaje-final {
+  font-size: 2em;
+  color: #ff9900;
+  margin-top: 30px;
+  text-shadow: 0 0 10px #ff9900, 0 0 20px #cc6600;
+}
+
+/* Gráfica */
+.juego-memoria .grafica {
+  margin-top: 30px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.juego-memoria #graficoResultados {
+  max-width: 100%;
+}
+
+/* Responsive para pantallas pequeñas (375px, como iPhone) */
+@media (max-width: 375px) {
+  .juego-memoria {
+    font-size: 14px;
+  }
+
+  .juego-memoria .juego-container {
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 90%;
+  }
+
+  .juego-memoria .pregunta {
+    font-size: 1.8em;
+  }
+
+  .juego-memoria .btn-opcion {
+    font-size: 1.2em;
+    padding: 10px 15px;
+  }
+
+  .juego-memoria .info-panel {
+    flex-direction: column;
+    gap: 10px;
+    font-size: 1em;
+  }
+
+  .juego-memoria .volver-jugar {
+    font-size: 1.2em;
+    padding: 10px 20px;
+  }
+
+  .juego-memoria .grafica {
+    padding: 10px;
+  }
+
+  .juego-memoria #graficoResultados {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Responsive para pantallas medianas (768px, como iPad) */
+@media (max-width: 768px) {
+  .juego-memoria {
+    font-size: 16px;
+  }
+
+  .juego-memoria .juego-container {
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 80%;
+  }
+
+  .juego-memoria .pregunta {
+    font-size: 2em;
+  }
+
+  .juego-memoria .btn-opcion {
+    font-size: 1.3em;
+    padding: 12px 20px;
+  }
+
+  .juego-memoria .info-panel {
+    font-size: 1.2em;
+  }
+
+  .juego-memoria .volver-jugar {
+    font-size: 1.3em;
+    padding: 12px 25px;
+  }
+
+  .juego-memoria .grafica {
+    padding: 15px;
+  }
+
+  .juego-memoria #graficoResultados {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.juego-memoria {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.juego-memoria .niveles-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
 }
