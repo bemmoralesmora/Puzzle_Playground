@@ -1,0 +1,81 @@
+.resultados {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--blue-claro);
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  padding-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+  color: white;
+  font-family: "Bungee", sans-serif;
+  font-weight: 400;
+}
+
+.podio {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+  text-align: center;
+}
+
+.columna {
+  width: 180px;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s;
+}
+
+.columna:hover {
+  transform: scale(1.05);
+}
+
+.columna h3 {
+  margin: 10px 0 0;
+  font-size: 20px;
+}
+
+.columna p {
+  margin: 2px 0;
+  font-size: 10px;
+}
+
+/* Alturas según puesto (visualmente como podio) */
+.puesto-1 {
+  height: 280px;
+  background-color: var(--amarillo);
+}
+.puesto-2 {
+  height: 250px;
+  background-color: silver;
+}
+.puesto-3 {
+  height: 220px;
+  background-color: #cd7f32;
+}
+.puesto-4 {
+  height: 190px;
+  background-color: #9e9e9e;
+}
+.puesto-5 {
+  height: 160px;
+  background-color: #757575;
+}
+
+.medalla {
+  font-size: 22px;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
