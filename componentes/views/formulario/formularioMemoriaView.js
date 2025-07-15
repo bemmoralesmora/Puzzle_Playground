@@ -223,6 +223,10 @@ export function cargarFormularioMemoria() {
       const resultado = await guardarPartida(datosPartida);
       console.log("✅ Partida de memoria guardada:", resultado);
 
+      const idPartida =
+        resultado.id_partida || resultado.idPartidas || resultado.id;
+      localStorage.setItem("id_partida", idPartida); // 👈 GUÁRDALO AQUÍ
+
       await new Promise((res) => setTimeout(res, 5000));
 
       const exito = document.createElement("div");

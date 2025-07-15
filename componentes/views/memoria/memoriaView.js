@@ -290,7 +290,7 @@ function startGameTimer(initialTime, timeoutCallback) {
   }, 1000);
 }
 
-function showVictoryMessage() {
+async function showVictoryMessage() {
   const livesLost = 5 - remainingLives;
   const maxLevel = 5;
   const efficiency = Math.round((scorePoints / (100 + maxLevel * 2)) * 100);
@@ -342,19 +342,44 @@ function showVictoryMessage() {
     createStatElement("🚀", `${maxLevel}/5`, "Nivel alcanzado")
   );
 
-  podium.onclick = () => {
+  podium.onclick = async () => {
     victoryPopup.remove();
     remainingLives = 5;
     scorePoints = 0;
     const mainContent = document.querySelector("#root");
     mainContent.innerHTML = "";
-    mainContent.appendChild(resultado());
+
+    const vistaResultados = await resultado();
+    mainContent.appendChild(vistaResultados);
   };
 
   popupContainer.appendChild(popupTitle);
   popupContainer.appendChild(popupMessage);
   popupContainer.appendChild(statsGrid);
   popupContainer.appendChild(podium);
+
+  // Suponiendo que ya tienes el id_partida y el token
+  fetch(
+    "https://backend-game-mnte.onrender.com/api/partidas/guardar-resultado",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"), // o como guardes tu token
+      },
+      body: JSON.stringify({
+        id_partida: localStorage.getItem("id_partida"), // guarda esto antes de jugar
+        id_login: localStorage.getItem("userId"),
+        puntos_obtenidos: scorePoints,
+      }),
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Puntos guardados:", data);
+    })
+    .catch((err) => console.error("Error al guardar puntos:", err));
+
   victoryPopup.appendChild(popupContainer);
   document.body.appendChild(victoryPopup);
 }
