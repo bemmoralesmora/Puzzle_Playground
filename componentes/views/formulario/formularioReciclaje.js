@@ -1,5 +1,5 @@
 import { pantalla_carga } from "../carga/cargaView.js";
-import { cargarDOM } from "../reciclaje/juegoReciclaje.js";
+import { cargarReciclaje } from "../reciclaje/juegoReciclaje.js";
 import { getSocket, conectarSocket } from "../../../socketManager.js";
 import { AuthService } from "../../../authService.js";
 
@@ -292,7 +292,9 @@ export function cargarFormularioReciclaje() {
             socket.once("partida_comenzada", (data) => {
               console.log("🎮 Partida comenzó:", data);
               DOM.innerHTML = "";
-              DOM.appendChild(cargarDOM(parseInt(data.nivel), data.dificultad));
+              DOM.appendChild(
+                cargarReciclaje(parseInt(data.nivel), data.dificultad)
+              );
             });
 
             socket.once("error_partida", (error) => {

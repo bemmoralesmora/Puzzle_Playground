@@ -2,7 +2,7 @@ import { pantalla_carga } from "../carga/cargaView.js";
 import { juego } from "../preguntasView/preguntasView.js";
 import { memoriaGame } from "../memoria/memoriaView.js";
 import { cargarAhorcado } from "../ahorcado/juegoAhorcado.js";
-import { cargarDOM } from "../reciclaje/juegoReciclaje.js";
+import { cargarReciclaje } from "../reciclaje/juegoReciclaje.js";
 import {
   conectarSocket,
   escucharEventos,
@@ -355,7 +355,7 @@ function jugar_amigos() {
         } else if (data.nombre_juego === "ahorcado") {
           DOM.appendChild(cargarAhorcado(nivel, dificultad));
         } else if (data.nombre_juego === "puzzle") {
-          DOM.appendChild(cargarDOM(nivel, dificultad));
+          DOM.appendChild(cargarReciclaje(nivel, dificultad));
         } else {
           DOM.appendChild(juego(nivel, dificultad)); // trivia por defecto
         }
