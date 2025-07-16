@@ -80,8 +80,7 @@ function crearJuegoMemoria() {
   imagen_memorias.className = "imagen_preguntas";
 
   let img_memorias = document.createElement("img");
-  img_memorias.src =
-    "https://i.pinimg.com/736x/e5/47/f1/e547f15649f1d97a24103e84e9f2dd0e.jpg";
+  img_memorias.src = "../../componentes/assets/memoria.png";
 
   imagen_memorias.appendChild(img_memorias);
   juego_memoria.appendChild(imagen_memorias);
@@ -111,8 +110,7 @@ function crearJuegoPreguntas() {
   imagen_preguntas.className = "imagen_preguntas";
 
   let imgPreguntas = document.createElement("img");
-  imgPreguntas.src =
-    "https://i.pinimg.com/736x/15/3e/bf/153ebf163aa863edc7e452f121e5d62d.jpg";
+  imgPreguntas.src = "../../componentes/assets/dinosa.png";
 
   imagen_preguntas.appendChild(imgPreguntas);
   juego_preguntas.appendChild(imagen_preguntas);
