@@ -1,123 +1,420 @@
-/* Estilos específicos para el juego del ahorcado */
-.juego-ahorcado-container {
-  background-color: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+/* Estilos generales */
+.ahorcado-container {
+  background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   padding: 2rem;
+  max-width: 900px;
+  margin: 2rem auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   position: relative;
-  color: #111;
-  margin-top: 1.5rem;
+  overflow: hidden;
 }
 
-.juego-ahorcado-titulo {
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 1rem;
-  text-align: center;
+.ahorcado-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: linear-gradient(90deg, #3b82f6, #ec4899, #f59e0b, #10b981);
 }
 
-.juego-ahorcado-palabra {
-  font-size: 2.5rem;
-  text-align: center;
-  letter-spacing: 0.5rem;
-  margin: 2rem 0;
-  color: #333;
+.ahorcado-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
-.juego-ahorcado-letras-container {
-  text-align: center;
+.ahorcado-titulo {
+  font-size: 1.8rem;
+  color: #1f2937;
+  margin: 0;
+  font-weight: 700;
 }
 
-.juego-ahorcado-letra-btn {
-  padding: 0.6rem 1rem;
+.ahorcado-titulo .nivel-numero {
+  color: #3b82f6;
+  font-weight: 800;
+}
+
+.ahorcado-puntos {
+  font-size: 1.2rem;
+  background: rgba(59, 130, 246, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  color: #1e40af;
+  font-weight: 600;
+}
+
+.ahorcado-puntos .puntos-numero {
+  font-weight: 800;
+  color: #1e40af;
+}
+
+.ahorcado-area-juego {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.ahorcado-panel-izquierdo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 120px;
+}
+
+.ahorcado-temporizador {
+  background: white;
+  padding: 0.8rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   font-size: 1rem;
-  font-weight: bold;
-  color: #111;
+  font-weight: 600;
+  color: #10b981;
+  text-align: center;
+}
+
+.ahorcado-temporizador .tiempo-numero {
+  font-weight: 800;
+}
+
+.ahorcado-vidas {
+  background: white;
+  padding: 0.8rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.ahorcado-panel-central {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ahorcado-palabra {
+  font-size: 2.5rem;
+  letter-spacing: 0.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  background: white;
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  min-width: 300px;
+  text-align: center;
+}
+
+.ahorcado-panel-derecho {
+  min-width: 300px;
+}
+
+.ahorcado-letras-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ahorcado-fila-letras {
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.ahorcado-letra-btn {
+  width: 40px;
+  height: 40px;
   border: none;
-  border-radius: 0.5rem;
-  background-color: #dbeafe;
+  border-radius: 8px;
+  background: #e5e7eb;
+  color: #4b5563;
+  font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
-  margin: 0.2rem;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.juego-ahorcado-letra-btn:hover:not(:disabled) {
-  background-color: #60a5fa;
-  color: white;
+.ahorcado-letra-btn:hover:not(:disabled) {
+  background: #d1d5db;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.juego-ahorcado-letra-btn:disabled {
-  opacity: 0.5;
+.ahorcado-letra-btn:disabled {
   cursor: not-allowed;
 }
 
-.juego-ahorcado-vidas {
-  font-size: 1.2rem;
-  font-weight: bold;
-  position: absolute;
-  top: 1rem;
-  right: 2rem;
-  color: #ef4444;
-}
-
-.juego-ahorcado-temporizador {
-  font-size: 1.2rem;
-  font-weight: bold;
-  position: absolute;
-  top: 1rem;
-  left: 2rem;
-  color: #10b981;
-}
-
-.juego-ahorcado-puntos {
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-align: center;
-  margin: 1rem 0;
-  color: #333;
-}
-
-/* Tabla de resultados */
-.juego-ahorcado-tabla {
-  width: 100%;
-  margin-top: 1rem;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.juego-ahorcado-tabla th,
-.juego-ahorcado-tabla td {
-  border: 1px solid #ccc;
-  padding: 0.5rem;
-  text-align: center;
-}
-
-.juego-ahorcado-tabla th {
-  background-color: #e2e8f0;
-  color: #1f2937;
-  font-weight: bold;
-}
-
-.juego-ahorcado-tabla td {
-  color: #111;
-}
-
-/* Botón de descarga */
-.juego-ahorcado-descargar-btn {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  background-color: #3b82f6;
+.ahorcado-letra-btn.usada.correcta {
+  background: #4ade80;
   color: white;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
 }
 
-.juego-ahorcado-descargar-btn:hover {
-  background-color: #2563eb;
+.ahorcado-letra-btn.usada.incorrecta {
+  background: #f87171;
+  color: white;
+}
+
+.ahorcado-barra-progreso {
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  margin-top: 1rem;
+  overflow: hidden;
+}
+
+.ahorcado-barra-progreso-relleno {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #ec4899);
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+/* Resumen de partida */
+.ahorcado-resumen {
+  margin-top: 2rem;
+}
+
+.ahorcado-resumen-contenido {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.ahorcado-resumen-titulo {
+  color: #1f2937;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.ahorcado-puntos-finales {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.ahorcado-puntos-finales span {
+  font-weight: 800;
+  color: #3b82f6;
+}
+
+.ahorcado-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+.ahorcado-tabla th {
+  background: #f3f4f6;
+  color: #4b5563;
+  padding: 0.8rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.ahorcado-tabla td {
+  padding: 0.8rem;
+  border-bottom: 1px solid #e5e7eb;
+  color: #4b5563;
+}
+
+.ahorcado-tabla tr:last-child td {
+  border-bottom: none;
+}
+
+.ahorcado-tabla .estado {
+  padding: 0.3rem 0.6rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.ahorcado-tabla .estado.correcto {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.ahorcado-tabla .estado.sin-vidas,
+.ahorcado-tabla .estado.tiempo-agotado {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.ahorcado-resumen-botones {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.ahorcado-boton-reiniciar,
+.ahorcado-boton-descargar {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ahorcado-boton-reiniciar {
+  background: #3b82f6;
+  color: white;
+}
+
+.ahorcado-boton-reiniciar:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
+}
+
+.ahorcado-boton-descargar {
+  background: white;
+  color: #4b5563;
+  border: 1px solid #e5e7eb;
+}
+
+.ahorcado-boton-descargar:hover {
+  background: #f9fafb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Animaciones */
+.ahorcado-confetti {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%233b82f6"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/></svg>') repeat;
+  opacity: 0;
+  animation: confetti 1s ease-out;
+  z-index: 10;
+  pointer-events: none;
+}
+
+@keyframes confetti {
+  0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+  100% { opacity: 0; transform: translateY(-100px) rotate(360deg); }
+}
+
+.ahorcado-nivel-up {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.ahorcado-nivel-up .nivel-up-contenido {
+  text-align: center;
+  animation: scaleIn 0.5s ease-out;
+}
+
+.ahorcado-nivel-up i {
+  font-size: 4rem;
+  color: #f59e0b;
+  margin-bottom: 1rem;
+}
+
+.ahorcado-nivel-up h3 {
+  font-size: 2rem;
+  color: #1f2937;
+  margin: 0 0 0.5rem;
+}
+
+.ahorcado-nivel-up p {
+  font-size: 1.2rem;
+  color: #4b5563;
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ahorcado-area-juego {
+    flex-direction: column;
+  }
+  
+  .ahorcado-panel-izquierdo {
+    flex-direction: row;
+    justify-content: space-between;
+    min-width: auto;
+  }
+  
+  .ahorcado-palabra {
+    min-width: auto;
+    font-size: 1.8rem;
+    padding: 1rem;
+  }
+  
+  .ahorcado-letra-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+  }
+  
+  .ahorcado-resumen-botones {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .ahorcado-container {
+    padding: 1rem;
+  }
+  
+  .ahorcado-cabecera {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .ahorcado-palabra {
+    font-size: 1.5rem;
+    letter-spacing: 0.3rem;
+  }
+  
+  .ahorcado-letra-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+  
+  .ahorcado-tabla th, 
+  .ahorcado-tabla td {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
 }

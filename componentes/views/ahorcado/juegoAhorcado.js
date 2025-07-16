@@ -9,40 +9,84 @@ export function cargarAhorcado() {
   let puntos = 0;
 
   const contenedor = document.createElement("div");
-  contenedor.className = "juego-ahorcado-container";
+  contenedor.className = "ahorcado-container";
+
+  // Cabecera del juego
+  const cabecera = document.createElement("div");
+  cabecera.className = "ahorcado-cabecera";
+  contenedor.appendChild(cabecera);
 
   const titulo = document.createElement("h2");
-  titulo.className = "juego-ahorcado-titulo";
-  contenedor.appendChild(titulo);
+  titulo.className = "ahorcado-titulo";
+  titulo.innerHTML = `Nivel <span class="nivel-numero">${nivel}</span>`;
+  cabecera.appendChild(titulo);
 
-  const palabraElemento = document.createElement("div");
-  palabraElemento.className = "juego-ahorcado-palabra";
-  contenedor.appendChild(palabraElemento);
+  // Contador de puntos con efecto neón
+  const puntosElemento = document.createElement("div");
+  puntosElemento.className = "ahorcado-puntos";
+  puntosElemento.innerHTML = `⭐ <span class="puntos-numero">${puntos}</span> puntos`;
+  cabecera.appendChild(puntosElemento);
 
-  const letrasDiv = document.createElement("div");
-  letrasDiv.className = "juego-ahorcado-letras-container";
-  contenedor.appendChild(letrasDiv);
+  // Área de juego principal
+  const areaJuego = document.createElement("div");
+  areaJuego.className = "ahorcado-area-juego";
+  contenedor.appendChild(areaJuego);
 
-  const vidasElemento = document.createElement("div");
-  vidasElemento.className = "juego-ahorcado-vidas";
-  contenedor.appendChild(vidasElemento);
+  // Panel izquierdo (temporizador y vidas)
+  const panelIzquierdo = document.createElement("div");
+  panelIzquierdo.className = "ahorcado-panel-izquierdo";
+  areaJuego.appendChild(panelIzquierdo);
 
   const timerElemento = document.createElement("div");
-  timerElemento.className = "juego-ahorcado-temporizador";
-  contenedor.appendChild(timerElemento);
+  timerElemento.className = "ahorcado-temporizador";
+  timerElemento.innerHTML = '<i class="fas fa-clock"></i> <span class="tiempo-numero">0</span>s';
+  panelIzquierdo.appendChild(timerElemento);
 
-  const puntosElemento = document.createElement("div");
-  puntosElemento.className = "juego-ahorcado-puntos";
-  contenedor.appendChild(puntosElemento);
+  const vidasElemento = document.createElement("div");
+  vidasElemento.className = "ahorcado-vidas";
+  panelIzquierdo.appendChild(vidasElemento);
 
+  // Panel central (palabra)
+  const panelCentral = document.createElement("div");
+  panelCentral.className = "ahorcado-panel-central";
+  areaJuego.appendChild(panelCentral);
+
+  const palabraElemento = document.createElement("div");
+  palabraElemento.className = "ahorcado-palabra";
+  panelCentral.appendChild(palabraElemento);
+
+  // Panel derecho (letras)
+  const panelDerecho = document.createElement("div");
+  panelDerecho.className = "ahorcado-panel-derecho";
+  areaJuego.appendChild(panelDerecho);
+
+  const letrasDiv = document.createElement("div");
+  letrasDiv.className = "ahorcado-letras-container";
+  panelDerecho.appendChild(letrasDiv);
+
+  // Resumen (se muestra al final)
   const resumenDiv = document.createElement("div");
-  resumenDiv.className = "juego-ahorcado-resumen";
+  resumenDiv.className = "ahorcado-resumen";
   contenedor.appendChild(resumenDiv);
+
+  // Elemento de progreso (barra de nivel)
+  const barraProgreso = document.createElement("div");
+  barraProgreso.className = "ahorcado-barra-progreso";
+  const barraProgresoRelleno = document.createElement("div");
+  barraProgresoRelleno.className = "ahorcado-barra-progreso-relleno";
+  barraProgreso.appendChild(barraProgresoRelleno);
+  contenedor.appendChild(barraProgreso);
+
+  function actualizarBarraProgreso() {
+    const porcentaje = (palabrasGanadas / 3) * 100;
+    barraProgresoRelleno.style.width = `${porcentaje}%`;
+  }
 
   function iniciarNivel() {
     letrasDiv.innerHTML = "";
     resumenDiv.innerHTML = "";
-    titulo.textContent = `Nivel ${nivel}`;
+    titulo.innerHTML = `Nivel <span class="nivel-numero">${nivel}</span>`;
+    barraProgresoRelleno.style.width = "0%";
 
     let palabras = palabrasPorNivel[nivel] || palabrasPorNivel[5];
     let palabra = palabras[Math.floor(Math.random() * palabras.length)];
@@ -61,7 +105,7 @@ export function cargarAhorcado() {
     actualizarPuntos();
 
     function actualizarPuntos() {
-      puntosElemento.textContent = `⭐ Puntos: ${puntos}`;
+      puntosElemento.innerHTML = `⭐ <span class="puntos-numero">${puntos}</span> puntos`;
     }
 
     intervalo = setInterval(() => {
@@ -80,83 +124,167 @@ export function cargarAhorcado() {
       }
     }, 1000);
 
-    for (let i = 65; i <= 90; i++) {
-      let letra = String.fromCharCode(i);
-      let boton = document.createElement("button");
-      boton.textContent = letra;
-      boton.className = "juego-ahorcado-letra-btn";
+    // Crear teclado visual
+    const filasLetras = [
+      ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+      ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+      ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+    ];
 
-      boton.addEventListener("click", function () {
-        if (letrasUsadas.includes(letra) || vidas <= 0) return;
+    filasLetras.forEach(fila => {
+      const filaDiv = document.createElement("div");
+      filaDiv.className = "ahorcado-fila-letras";
+      
+      fila.forEach(letra => {
+        const boton = document.createElement("button");
+        boton.textContent = letra;
+        boton.className = "ahorcado-letra-btn";
+        boton.dataset.letra = letra;
 
-        letrasUsadas.push(letra);
-        boton.disabled = true;
+        boton.addEventListener("click", function () {
+          if (letrasUsadas.includes(letra) || vidas <= 0) return;
 
-        if (palabra.includes(letra)) {
-          for (let j = 0; j < palabra.length; j++) {
-            if (palabra[j] === letra) {
-              palabraOculta[j] = letra;
+          letrasUsadas.push(letra);
+          boton.disabled = true;
+          boton.classList.add("usada");
+
+          if (palabra.includes(letra)) {
+            boton.classList.add("correcta");
+            for (let j = 0; j < palabra.length; j++) {
+              if (palabra[j] === letra) {
+                palabraOculta[j] = letra;
+              }
             }
-          }
-          palabraElemento.textContent = palabraOculta.join(" ");
-        } else {
-          vidas--;
-          actualizarVidas(vidas);
-        }
-
-        if (!palabraOculta.includes("_")) {
-          clearInterval(intervalo);
-          puntos += 10;
-          actualizarPuntos();
-          guardarResultado(
-            "Correcto",
-            palabra,
-            nivel,
-            tiempoInicial - tiempo,
-            vidas
-          );
-          palabrasGanadas++;
-          if (palabrasGanadas >= 3) {
-            alert("¡Subiste de nivel!");
-            nivel++;
-            palabrasGanadas = 0;
+            palabraElemento.textContent = palabraOculta.join(" ");
+            
+            // Efecto visual para letra correcta
+            boton.animate([
+              { transform: 'scale(1)', backgroundColor: '#4ade80' },
+              { transform: 'scale(1.1)', backgroundColor: '#86efac' },
+              { transform: 'scale(1)', backgroundColor: '#4ade80' }
+            ], {
+              duration: 300,
+              iterations: 1
+            });
           } else {
-            alert("¡Palabra correcta!");
+            boton.classList.add("incorrecta");
+            vidas--;
+            actualizarVidas(vidas);
+            
+            // Efecto visual para letra incorrecta
+            boton.animate([
+              { transform: 'translateX(0px)', backgroundColor: '#f87171' },
+              { transform: 'translateX(-5px)', backgroundColor: '#fca5a5' },
+              { transform: 'translateX(5px)', backgroundColor: '#fca5a5' },
+              { transform: 'translateX(0px)', backgroundColor: '#f87171' }
+            ], {
+              duration: 300,
+              iterations: 1
+            });
           }
-          iniciarNivel();
-        } else if (vidas === 0) {
-          clearInterval(intervalo);
-          guardarResultado(
-            "Sin vidas",
-            palabra,
-            nivel,
-            tiempoInicial - tiempo,
-            vidas
-          );
-          mostrarResumen();
-        }
-      });
 
-      letrasDiv.appendChild(boton);
-    }
+          if (!palabraOculta.includes("_")) {
+            clearInterval(intervalo);
+            puntos += 10;
+            actualizarPuntos();
+            guardarResultado(
+              "Correcto",
+              palabra,
+              nivel,
+              tiempoInicial - tiempo,
+              vidas
+            );
+            palabrasGanadas++;
+            actualizarBarraProgreso();
+            
+            // Efecto de confeti al acertar palabra
+            if (palabrasGanadas >= 3) {
+              nivel++;
+              palabrasGanadas = 0;
+              mostrarAnimacionNivel();
+            } else {
+              mostrarAnimacionAcierto();
+              setTimeout(() => iniciarNivel(), 1500);
+            }
+          } else if (vidas === 0) {
+            clearInterval(intervalo);
+            guardarResultado(
+              "Sin vidas",
+              palabra,
+              nivel,
+              tiempoInicial - tiempo,
+              vidas
+            );
+            mostrarResumen();
+          }
+        });
+
+        filaDiv.appendChild(boton);
+      });
+      
+      letrasDiv.appendChild(filaDiv);
+    });
   }
 
   function actualizarVidas(vidas) {
-    vidasElemento.textContent =
-      "❤️".repeat(vidas) + "🤍".repeat(vidasIniciales - vidas);
+    vidasElemento.innerHTML = "";
+    for (let i = 0; i < vidasIniciales; i++) {
+      const corazon = document.createElement("i");
+      corazon.className = "fas fa-heart";
+      corazon.style.color = i < vidas ? "#ef4444" : "#d1d5db";
+      vidasElemento.appendChild(corazon);
+    }
   }
 
   function actualizarTemporizador(tiempo) {
-    timerElemento.textContent = `⏱️ ${tiempo}s`;
+    const tiempoNumero = timerElemento.querySelector(".tiempo-numero");
+    tiempoNumero.textContent = tiempo;
+    
+    // Cambiar color según el tiempo restante
+    if (tiempo <= 10) {
+      timerElemento.style.color = "#ef4444";
+      tiempoNumero.animate([
+        { transform: 'scale(1)' },
+        { transform: 'scale(1.2)' },
+        { transform: 'scale(1)' }
+      ], {
+        duration: 1000,
+        iterations: 1
+      });
+    } else {
+      timerElemento.style.color = "#10b981";
+    }
   }
 
-  function guardarResultado(
-    estado,
-    palabra,
-    nivel,
-    tiempoUsado,
-    vidasRestantes
-  ) {
+  function mostrarAnimacionAcierto() {
+    const confetti = document.createElement("div");
+    confetti.className = "ahorcado-confetti";
+    panelCentral.appendChild(confetti);
+    
+    setTimeout(() => {
+      confetti.remove();
+    }, 1000);
+  }
+
+  function mostrarAnimacionNivel() {
+    const nivelUp = document.createElement("div");
+    nivelUp.className = "ahorcado-nivel-up";
+    nivelUp.innerHTML = `
+      <div class="nivel-up-contenido">
+        <i class="fas fa-trophy"></i>
+        <h3>¡Subiste de nivel!</h3>
+        <p>Ahora estás en nivel ${nivel}</p>
+      </div>
+    `;
+    contenedor.appendChild(nivelUp);
+    
+    setTimeout(() => {
+      nivelUp.remove();
+      iniciarNivel();
+    }, 2500);
+  }
+
+  function guardarResultado(estado, palabra, nivel, tiempoUsado, vidasRestantes) {
     resultados.push({
       palabra,
       nivel,
@@ -171,53 +299,82 @@ export function cargarAhorcado() {
     letrasDiv.innerHTML = "";
     palabraElemento.textContent = "";
     titulo.textContent = "🏁 Fin del juego";
-    vidasElemento.textContent = "";
-    timerElemento.textContent = "";
+    vidasElemento.innerHTML = "";
+    timerElemento.innerHTML = "";
+
+    const resumenContenido = document.createElement("div");
+    resumenContenido.className = "ahorcado-resumen-contenido";
+    
+    const tituloResumen = document.createElement("h3");
+    tituloResumen.textContent = "Resumen de Partida";
+    tituloResumen.className = "ahorcado-resumen-titulo";
+    resumenContenido.appendChild(tituloResumen);
+
+    const puntosFinales = document.createElement("div");
+    puntosFinales.className = "ahorcado-puntos-finales";
+    puntosFinales.innerHTML = `Total de puntos: <span>${puntos}</span>`;
+    resumenContenido.appendChild(puntosFinales);
 
     const tabla = document.createElement("table");
-    tabla.className = "juego-ahorcado-tabla";
+    tabla.className = "ahorcado-tabla";
     tabla.innerHTML = `
-            <tr>
-                <th>Lugar</th>
-                <th>Nivel</th>
-                <th>Palabra</th>
-                <th>Estado</th>
-                <th>Tiempo usado</th>
-                <th>Vidas restantes</th>
-                <th>Puntos</th>
-            </tr>
-        `;
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Palabra</th>
+          <th>Estado</th>
+          <th>Puntos</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    `;
 
+    const tbody = tabla.querySelector("tbody");
     resultados.forEach((r, index) => {
       const fila = document.createElement("tr");
       fila.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${r.nivel}</td>
-                <td>${r.palabra}</td>
-                <td>${r.estado}</td>
-                <td>${r.tiempoUsado}s</td>
-                <td>${r.vidasRestantes}</td>
-                <td>${r.puntos}</td>
-            `;
-      tabla.appendChild(fila);
+        <td>${index + 1}</td>
+        <td>${r.palabra}</td>
+        <td><span class="estado ${r.estado.toLowerCase().replace(' ', '-')}">${r.estado}</span></td>
+        <td>${r.estado === "Correcto" ? "+10" : "0"}</td>
+      `;
+      tbody.appendChild(fila);
     });
 
-    const botonDescargar = document.createElement("button");
-    botonDescargar.className = "juego-ahorcado-descargar-btn";
-    botonDescargar.textContent = "📥 Descargar resultados";
-    botonDescargar.onclick = () => descargarCSV();
+    resumenContenido.appendChild(tabla);
 
-    resumenDiv.appendChild(tabla);
-    resumenDiv.appendChild(botonDescargar);
+    const botonesContainer = document.createElement("div");
+    botonesContainer.className = "ahorcado-resumen-botones";
+    
+    const botonReiniciar = document.createElement("button");
+    botonReiniciar.className = "ahorcado-boton-reiniciar";
+    botonReiniciar.innerHTML = '<i class="fas fa-redo"></i> Jugar de nuevo';
+    botonReiniciar.onclick = () => {
+      resultados = [];
+      nivel = 1;
+      palabrasGanadas = 0;
+      puntos = 0;
+      iniciarNivel();
+    };
+    
+    const botonDescargar = document.createElement("button");
+    botonDescargar.className = "ahorcado-boton-descargar";
+    botonDescargar.innerHTML = '<i class="fas fa-download"></i> Descargar resultados';
+    botonDescargar.onclick = () => descargarCSV();
+    
+    botonesContainer.appendChild(botonReiniciar);
+    botonesContainer.appendChild(botonDescargar);
+    resumenContenido.appendChild(botonesContainer);
+    
+    resumenDiv.appendChild(resumenContenido);
   }
 
   function descargarCSV() {
-    const encabezado =
-      "Lugar,Nivel,Palabra,Estado,Tiempo usado,Vidas restantes,Puntos\n";
+    const encabezado = "Lugar,Palabra,Nivel,Estado,Tiempo usado,Vidas restantes,Puntos\n";
     const filas = resultados
       .map(
         (r, index) =>
-          `${index + 1},${r.nivel},${r.palabra},${r.estado},${r.tiempoUsado},${
+          `${index + 1},${r.palabra},${r.nivel},${r.estado},${r.tiempoUsado},${
             r.vidasRestantes
           },${r.puntos}`
       )
@@ -232,6 +389,13 @@ export function cargarAhorcado() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    
+    // Efecto visual al descargar
+    const botonDescargar = document.querySelector(".ahorcado-boton-descargar");
+    botonDescargar.innerHTML = '<i class="fas fa-check"></i> ¡Descargado!';
+    setTimeout(() => {
+      botonDescargar.innerHTML = '<i class="fas fa-download"></i> Descargar resultados';
+    }, 2000);
   }
 
   iniciarNivel();
