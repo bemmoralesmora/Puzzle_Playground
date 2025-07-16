@@ -1,4 +1,6 @@
 // Datos del juego
+import { resultado } from "../resultados/resultados.js";
+import { guardarResultadoPartida } from "../memoria/memoriaView.js";
 const niveles = [
   {
     nivel: 1,
@@ -79,6 +81,7 @@ function pasarNivel() {
 function perderVida() {
   jugador.vidas--;
   jugador.puntos = Math.max(0, jugador.puntos - 5);
+  actualizarVidas(jugador);
   if (jugador.vidas <= 0) {
     finalizarJuego();
   } else {
@@ -88,6 +91,7 @@ function perderVida() {
 
 function finalizarJuego() {
   clearInterval(intervaloGlobal);
+  clearInterval(intervaloTiempo);
 
   historial.push({
     nombre: jugador.nombre,
@@ -98,13 +102,47 @@ function finalizarJuego() {
     puntos: jugador.puntos,
   });
 
-  // Reiniciar estado para siguiente partida
+  // Guardar en el backend
+  guardarResultadoPartida(jugador.puntos);
+
+  // Mostrar podio
+  const root = document.getElementById("root");
+  root.innerHTML = "";
+
+  const finalDiv = document.createElement("div");
+  finalDiv.className = "jr-final-screen";
+
+  const titulo = document.createElement("h2");
+  titulo.textContent = "🎉 ¡Juego terminado!";
+  titulo.className = "jr-final-title";
+
+  const puntosTexto = document.createElement("p");
+  puntosTexto.textContent = `⭐ Puntos obtenidos: ${jugador.puntos}`;
+
+  const tiempoTexto = document.createElement("p");
+  tiempoTexto.textContent = `⏱️ Tiempo total: ${jugador.tiempoTotal} segundos`;
+
+  const botonPodio = document.createElement("button");
+  botonPodio.textContent = "Ver Podio";
+  botonPodio.className = "jr-btn-podio";
+  botonPodio.addEventListener("click", async () => {
+    const vista = await resultado();
+    root.innerHTML = "";
+    root.appendChild(vista);
+  });
+
+  finalDiv.appendChild(titulo);
+  finalDiv.appendChild(puntosTexto);
+  finalDiv.appendChild(tiempoTexto);
+  finalDiv.appendChild(botonPodio);
+
+  root.appendChild(finalDiv);
+
+  // Reiniciar estado para la siguiente partida
   jugador.nivel = 1;
   jugador.vidas = 3;
   jugador.tiempoTotal = 0;
   jugador.puntos = 0;
-
-  mostrarResultados(historial);
 }
 
 function crearBasura(jugador, pasarNivel, perderVida, finalizarJuego) {
@@ -148,10 +186,13 @@ function crearBasura(jugador, pasarNivel, perderVida, finalizarJuego) {
     bote.addEventListener("dragover", (e) => e.preventDefault());
 
     bote.addEventListener("drop", (e) => {
+      e.preventDefault();
       const id = e.dataTransfer.getData("text");
       const basura = document.getElementById(id);
-      e.target.appendChild(basura);
-      basura.style.fontSize = "1.6rem";
+      if (basura) {
+        e.target.appendChild(basura);
+        basura.style.fontSize = "1.6rem";
+      }
     });
 
     contenedorBotes.appendChild(bote);
@@ -206,40 +247,34 @@ function verificarClasificacion(
   finalizarJuego
 ) {
   let algunBoteLleno = false;
+  let correcto = true;
+
   tipos.forEach((tipo) => {
-    const bote = document.querySelector(`.bote.${tipo}`);
-    if (bote.querySelectorAll(".item-basura").length > 0) {
+    const bote = document.querySelector(`.jr-bin-${tipo}`);
+    const hijos = bote.querySelectorAll(".jr-trash-item");
+
+    if (hijos.length > 0) {
       algunBoteLleno = true;
     }
+
+    hijos.forEach((b) => {
+      if (b.dataset.tipo !== tipo) {
+        correcto = false;
+      }
+    });
   });
 
   if (!algunBoteLleno) {
-    alert("⚠️ ¡Por favor, llena los botes antes de verificar!");
+    alert("⚠️ ¡Por favor, clasifica al menos un objeto antes de verificar!");
     return;
   }
-
-  let correcto = true;
-  tipos.forEach((tipo) => {
-    const bote = document.querySelector(`.bote.${tipo}`);
-    const hijos = bote.querySelectorAll(".item-basura");
-    hijos.forEach((b) => {
-      if (b.dataset.tipo !== tipo) correcto = false;
-    });
-  });
 
   if (correcto) {
     alert(`✅ ¡Nivel ${jugador.nivel} superado!`);
     pasarNivel();
   } else {
-    jugador.vidas--;
-    actualizarVidas(jugador);
-    if (jugador.vidas <= 0) {
-      alert("😓 Te quedaste sin vidas. Reiniciando.");
-      finalizarJuego();
-    } else {
-      alert("❌ Clasificación incorrecta. Intenta de nuevo.");
-      perderVida();
-    }
+    alert("❌ Clasificación incorrecta. Intenta de nuevo.");
+    perderVida();
   }
 }
 
@@ -274,64 +309,6 @@ function iniciarTemporizador(jugador, perderVida, finalizarJuego) {
       }
     }
   }, 1000);
-}
-
-function cargarPantallaInicio(callback) {
-  const root = document.getElementById("root");
-  root.innerHTML = "";
-
-  const contenedor = document.createElement("div");
-  contenedor.className = "jr-start-screen";
-
-  const titulo = document.createElement("h1");
-  titulo.textContent = "🎮 Unirse a la partida";
-  titulo.className = "jr-start-title";
-
-  const inputNombre = document.createElement("input");
-  inputNombre.placeholder = "Nombre";
-  inputNombre.className = "jr-input-field";
-
-  const inputCodigo = document.createElement("input");
-  inputCodigo.placeholder = "Código de partida";
-  inputCodigo.className = "jr-input-field";
-
-  const avatarLabel = document.createElement("label");
-  avatarLabel.textContent = "Elige tu avatar:";
-
-  const selectAvatar = document.createElement("select");
-  selectAvatar.className = "jr-avatar-select";
-  ["😀", "👩‍🚀", "🐱", "🦊", "🐼", "🐸"].forEach((emoji) => {
-    const option = document.createElement("option");
-    option.value = emoji;
-    option.textContent = emoji;
-    selectAvatar.appendChild(option);
-  });
-
-  const boton = document.createElement("button");
-  boton.textContent = "Ingresar";
-  boton.className = "jr-start-button";
-
-  boton.addEventListener("click", () => {
-    const datos = {
-      nombre: inputNombre.value.trim() || "Anónimo",
-      codigo: inputCodigo.value.trim(),
-      avatar: selectAvatar.value,
-    };
-    if (!datos.codigo) {
-      alert("Por favor, ingresa el código de partida.");
-      return;
-    }
-    callback(datos);
-  });
-
-  contenedor.appendChild(titulo);
-  contenedor.appendChild(inputNombre);
-  contenedor.appendChild(inputCodigo);
-  contenedor.appendChild(avatarLabel);
-  contenedor.appendChild(selectAvatar);
-  contenedor.appendChild(boton);
-
-  root.appendChild(contenedor);
 }
 
 function mostrarResultados(datos) {
@@ -391,19 +368,16 @@ function exportarResultadosCSV(datos, nombreArchivo = "resultados.csv") {
 }
 
 // Iniciar la aplicación
-function cargarDOM() {
-  cargarPantallaInicio((datos) => {
-    jugador.nombre = datos.nombre;
-    jugador.avatar = datos.avatar;
-    jugador.codigo = datos.codigo;
+function cargarReciclaje() {
+  jugador.nombre = "Anónimo";
+  jugador.avatar = "😀";
+  jugador.codigo = "X";
 
-    intervaloGlobal = setInterval(() => {
-      jugador.tiempoTotal++;
-    }, 1000);
+  intervaloGlobal = setInterval(() => {
+    jugador.tiempoTotal++;
+  }, 1000);
 
-    cargarJuego();
-  });
+  cargarJuego();
 }
 
-cargarDOM();
-export { cargarDOM };
+export { cargarReciclaje };

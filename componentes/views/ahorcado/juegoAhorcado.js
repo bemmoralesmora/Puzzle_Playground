@@ -1,4 +1,6 @@
 import { palabrasPorNivel } from "./palabras.js";
+import { guardarResultadoPartida } from "../memoria/memoriaView.js";
+import { resultado } from "../resultados/resultados.js";
 
 let resultados = [];
 
@@ -39,7 +41,8 @@ export function cargarAhorcado() {
 
   const timerElemento = document.createElement("div");
   timerElemento.className = "ahorcado-temporizador";
-  timerElemento.innerHTML = '<i class="fas fa-clock"></i> <span class="tiempo-numero">0</span>s';
+  timerElemento.innerHTML =
+    '<i class="fas fa-clock"></i> <span class="tiempo-numero">0</span>s';
   panelIzquierdo.appendChild(timerElemento);
 
   const vidasElemento = document.createElement("div");
@@ -126,16 +129,16 @@ export function cargarAhorcado() {
 
     // Crear teclado visual
     const filasLetras = [
-      ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-      ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-      ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+      ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+      ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+      ["Z", "X", "C", "V", "B", "N", "M"],
     ];
 
-    filasLetras.forEach(fila => {
+    filasLetras.forEach((fila) => {
       const filaDiv = document.createElement("div");
       filaDiv.className = "ahorcado-fila-letras";
-      
-      fila.forEach(letra => {
+
+      fila.forEach((letra) => {
         const boton = document.createElement("button");
         boton.textContent = letra;
         boton.className = "ahorcado-letra-btn";
@@ -156,31 +159,37 @@ export function cargarAhorcado() {
               }
             }
             palabraElemento.textContent = palabraOculta.join(" ");
-            
+
             // Efecto visual para letra correcta
-            boton.animate([
-              { transform: 'scale(1)', backgroundColor: '#4ade80' },
-              { transform: 'scale(1.1)', backgroundColor: '#86efac' },
-              { transform: 'scale(1)', backgroundColor: '#4ade80' }
-            ], {
-              duration: 300,
-              iterations: 1
-            });
+            boton.animate(
+              [
+                { transform: "scale(1)", backgroundColor: "#4ade80" },
+                { transform: "scale(1.1)", backgroundColor: "#86efac" },
+                { transform: "scale(1)", backgroundColor: "#4ade80" },
+              ],
+              {
+                duration: 300,
+                iterations: 1,
+              }
+            );
           } else {
             boton.classList.add("incorrecta");
             vidas--;
             actualizarVidas(vidas);
-            
+
             // Efecto visual para letra incorrecta
-            boton.animate([
-              { transform: 'translateX(0px)', backgroundColor: '#f87171' },
-              { transform: 'translateX(-5px)', backgroundColor: '#fca5a5' },
-              { transform: 'translateX(5px)', backgroundColor: '#fca5a5' },
-              { transform: 'translateX(0px)', backgroundColor: '#f87171' }
-            ], {
-              duration: 300,
-              iterations: 1
-            });
+            boton.animate(
+              [
+                { transform: "translateX(0px)", backgroundColor: "#f87171" },
+                { transform: "translateX(-5px)", backgroundColor: "#fca5a5" },
+                { transform: "translateX(5px)", backgroundColor: "#fca5a5" },
+                { transform: "translateX(0px)", backgroundColor: "#f87171" },
+              ],
+              {
+                duration: 300,
+                iterations: 1,
+              }
+            );
           }
 
           if (!palabraOculta.includes("_")) {
@@ -196,7 +205,7 @@ export function cargarAhorcado() {
             );
             palabrasGanadas++;
             actualizarBarraProgreso();
-            
+
             // Efecto de confeti al acertar palabra
             if (palabrasGanadas >= 3) {
               nivel++;
@@ -221,7 +230,7 @@ export function cargarAhorcado() {
 
         filaDiv.appendChild(boton);
       });
-      
+
       letrasDiv.appendChild(filaDiv);
     });
   }
@@ -231,6 +240,7 @@ export function cargarAhorcado() {
     for (let i = 0; i < vidasIniciales; i++) {
       const corazon = document.createElement("i");
       corazon.className = "fas fa-heart";
+      corazon.textContent = "❤️";
       corazon.style.color = i < vidas ? "#ef4444" : "#d1d5db";
       vidasElemento.appendChild(corazon);
     }
@@ -239,18 +249,21 @@ export function cargarAhorcado() {
   function actualizarTemporizador(tiempo) {
     const tiempoNumero = timerElemento.querySelector(".tiempo-numero");
     tiempoNumero.textContent = tiempo;
-    
+
     // Cambiar color según el tiempo restante
     if (tiempo <= 10) {
       timerElemento.style.color = "#ef4444";
-      tiempoNumero.animate([
-        { transform: 'scale(1)' },
-        { transform: 'scale(1.2)' },
-        { transform: 'scale(1)' }
-      ], {
-        duration: 1000,
-        iterations: 1
-      });
+      tiempoNumero.animate(
+        [
+          { transform: "scale(1)" },
+          { transform: "scale(1.2)" },
+          { transform: "scale(1)" },
+        ],
+        {
+          duration: 1000,
+          iterations: 1,
+        }
+      );
     } else {
       timerElemento.style.color = "#10b981";
     }
@@ -260,7 +273,7 @@ export function cargarAhorcado() {
     const confetti = document.createElement("div");
     confetti.className = "ahorcado-confetti";
     panelCentral.appendChild(confetti);
-    
+
     setTimeout(() => {
       confetti.remove();
     }, 1000);
@@ -277,14 +290,20 @@ export function cargarAhorcado() {
       </div>
     `;
     contenedor.appendChild(nivelUp);
-    
+
     setTimeout(() => {
       nivelUp.remove();
       iniciarNivel();
     }, 2500);
   }
 
-  function guardarResultado(estado, palabra, nivel, tiempoUsado, vidasRestantes) {
+  function guardarResultado(
+    estado,
+    palabra,
+    nivel,
+    tiempoUsado,
+    vidasRestantes
+  ) {
     resultados.push({
       palabra,
       nivel,
@@ -304,7 +323,7 @@ export function cargarAhorcado() {
 
     const resumenContenido = document.createElement("div");
     resumenContenido.className = "ahorcado-resumen-contenido";
-    
+
     const tituloResumen = document.createElement("h3");
     tituloResumen.textContent = "Resumen de Partida";
     tituloResumen.className = "ahorcado-resumen-titulo";
@@ -335,7 +354,9 @@ export function cargarAhorcado() {
       fila.innerHTML = `
         <td>${index + 1}</td>
         <td>${r.palabra}</td>
-        <td><span class="estado ${r.estado.toLowerCase().replace(' ', '-')}">${r.estado}</span></td>
+        <td><span class="estado ${r.estado.toLowerCase().replace(" ", "-")}">${
+        r.estado
+      }</span></td>
         <td>${r.estado === "Correcto" ? "+10" : "0"}</td>
       `;
       tbody.appendChild(fila);
@@ -343,59 +364,26 @@ export function cargarAhorcado() {
 
     resumenContenido.appendChild(tabla);
 
+    // Guardar puntos al backend
+    guardarResultadoPartida(puntos);
+
     const botonesContainer = document.createElement("div");
     botonesContainer.className = "ahorcado-resumen-botones";
-    
-    const botonReiniciar = document.createElement("button");
-    botonReiniciar.className = "ahorcado-boton-reiniciar";
-    botonReiniciar.innerHTML = '<i class="fas fa-redo"></i> Jugar de nuevo';
-    botonReiniciar.onclick = () => {
-      resultados = [];
-      nivel = 1;
-      palabrasGanadas = 0;
-      puntos = 0;
-      iniciarNivel();
+
+    const botonPodio = document.createElement("button");
+    botonPodio.className = "ahorcado-boton-ver-podio";
+    botonPodio.innerHTML = '<i class="fas fa-trophy"></i> Ver Podio';
+    botonPodio.onclick = async () => {
+      const root = document.querySelector("#root");
+      root.innerHTML = "";
+      const vista = await resultado();
+      root.appendChild(vista);
     };
-    
-    const botonDescargar = document.createElement("button");
-    botonDescargar.className = "ahorcado-boton-descargar";
-    botonDescargar.innerHTML = '<i class="fas fa-download"></i> Descargar resultados';
-    botonDescargar.onclick = () => descargarCSV();
-    
-    botonesContainer.appendChild(botonReiniciar);
-    botonesContainer.appendChild(botonDescargar);
+
+    botonesContainer.appendChild(botonPodio);
     resumenContenido.appendChild(botonesContainer);
-    
+
     resumenDiv.appendChild(resumenContenido);
-  }
-
-  function descargarCSV() {
-    const encabezado = "Lugar,Palabra,Nivel,Estado,Tiempo usado,Vidas restantes,Puntos\n";
-    const filas = resultados
-      .map(
-        (r, index) =>
-          `${index + 1},${r.palabra},${r.nivel},${r.estado},${r.tiempoUsado},${
-            r.vidasRestantes
-          },${r.puntos}`
-      )
-      .join("\n");
-
-    const csv = encabezado + filas;
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "resultados_ahorcado.csv";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    // Efecto visual al descargar
-    const botonDescargar = document.querySelector(".ahorcado-boton-descargar");
-    botonDescargar.innerHTML = '<i class="fas fa-check"></i> ¡Descargado!';
-    setTimeout(() => {
-      botonDescargar.innerHTML = '<i class="fas fa-download"></i> Descargar resultados';
-    }, 2000);
   }
 
   iniciarNivel();
