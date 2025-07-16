@@ -1,6 +1,7 @@
 import { pantalla_carga } from "../carga/cargaView.js";
 import { preguntas } from "./preguntas.js";
 import { resultado } from "../resultados/resultados.js";
+import { guardarResultadoPartida } from "../memoria/memoriaView.js";
 
 export function juego(nivel) {
   const container = document.createElement("div");
@@ -124,26 +125,7 @@ export function juego(nivel) {
     container.appendChild(tiempoDiv);
 
     // Enviar los puntos al backend
-    fetch(
-      "https://backend-game-mnte.onrender.com/api/partidas/guardar-resultado",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        body: JSON.stringify({
-          id_partida: localStorage.getItem("id_partida"),
-          id_login: localStorage.getItem("userId"),
-          puntos_obtenidos: correctas,
-        }),
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Puntos guardados:", data);
-      })
-      .catch((err) => console.error("Error al guardar puntos:", err));
+    guardarResultadoPartida(correctas);
 
     const podioBtn = document.createElement("button");
     podioBtn.textContent = "Ver Podio";

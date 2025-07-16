@@ -290,6 +290,47 @@ function startGameTimer(initialTime, timeoutCallback) {
   }, 1000);
 }
 
+// utils/guardarResultado.js
+
+export async function guardarResultadoPartida(scorePoints) {
+  const idPartida = localStorage.getItem("id_partida");
+  const idLogin = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+
+  if (!idPartida || !idLogin || !token) {
+    console.warn("⚠️ No hay datos de sesión o partida.");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      "https://backend-game-mnte.onrender.com/api/partidas/guardar-resultado",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          id_partida: idPartida,
+          id_login: idLogin,
+          puntos_obtenidos: scorePoints,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!data.success) {
+      console.error("❌ No se pudo guardar resultado:", data.message);
+    } else {
+      console.log("✅ Resultado guardado correctamente");
+    }
+  } catch (error) {
+    console.error("❌ Error al guardar resultado:", error);
+  }
+}
+
 async function showVictoryMessage() {
   const livesLost = 5 - remainingLives;
   const maxLevel = 5;
@@ -358,26 +399,7 @@ async function showVictoryMessage() {
   popupContainer.appendChild(podium);
 
   // Suponiendo que ya tienes el id_partida y el token
-  fetch(
-    "https://backend-game-mnte.onrender.com/api/partidas/guardar-resultado",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("token"), // o como guardes tu token
-      },
-      body: JSON.stringify({
-        id_partida: localStorage.getItem("id_partida"), // guarda esto antes de jugar
-        id_login: localStorage.getItem("userId"),
-        puntos_obtenidos: scorePoints,
-      }),
-    }
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("Puntos guardados:", data);
-    })
-    .catch((err) => console.error("Error al guardar puntos:", err));
+  guardarResultadoPartida(scorePoints);
 
   victoryPopup.appendChild(popupContainer);
   document.body.appendChild(victoryPopup);
