@@ -236,3 +236,82 @@
 .columna:nth-child(5) {
   animation-delay: 1.1s;
 }
+
+/* Media Queries para ajustes específicos */
+@media (max-width: 768px) {
+  .podio {
+    gap: 8px;
+  }
+
+  .columna {
+    width: 18%;
+    min-width: 80px;
+    padding: 5px;
+  }
+
+  .puesto-1 {
+    height: 220px;
+  }
+  .puesto-2 {
+    height: 190px;
+  }
+  .puesto-3 {
+    height: 160px;
+  }
+  .puesto-4 {
+    height: 130px;
+  }
+  .puesto-5 {
+    height: 100px;
+  }
+
+  .botones-podio {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .resultados {
+    padding-bottom: 20px;
+    justify-content: flex-start;
+    padding-top: 40px;
+  }
+
+  .podio {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .columna {
+    width: 80%;
+    height: 60px !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 12px;
+    padding: 10px;
+  }
+
+  .medalla {
+    margin: 0;
+    width: 30px;
+    height: 30px;
+  }
+
+  .columna h3,
+  .columna p {
+    margin: 0;
+  }
+
+  .botones-podio {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .botones-podio button,
+  .boton-inicio,
+  .boton-guardar {
+    width: 90%;
+  }
+}
