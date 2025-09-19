@@ -190,7 +190,7 @@ export function cargarFormularioMemoria() {
       !dificultadSeleccionadaGlobal ||
       !numJugadores ||
       numJugadores < 1 ||
-      numJugadores > 5 ||
+      numJugadores > 30 ||
       codigoGenerado === "Complete los datos"
     ) {
       alert("Por favor completa todos los campos correctamente.");
